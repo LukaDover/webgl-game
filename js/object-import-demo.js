@@ -4,7 +4,6 @@ var gl;
 var shaderProgram;
 
 // Object .obj
-var objectString;
 var mesh;
 
 
@@ -13,8 +12,6 @@ var cubeVertexPositionBuffer;
 var cubeVertexNormalBuffer;
 var cubeVertexIndexBuffer;
 var cubeVertexTextureBuffer;
-var triangleVertexPositionBuffer;
-var squareVertexPositionBuffer;
 
 // Model-View and Projection matrices
 var mvMatrix = mat4.create();
@@ -146,49 +143,6 @@ function setMatrixUniforms() {
 // two objects -- a simple two-dimensional triangle and square.
 //
 function initBuffers() {
-    // TRIANGLE
-    // Create a buffer for the triangle's vertices.
-    triangleVertexPositionBuffer = gl.createBuffer();
-
-    // Select the triangleVertexPositionBuffer as the one to apply vertex
-    // operations to from here out.
-    gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-    var vertices = [
-        0.0,  1.0,  0.0,
-        -1.0, -1.0,  0.0,
-        1.0, -1.0,  0.0
-    ];
-
-    // Pass the list of vertices into WebGL to build the shape. We
-    // do this by creating a Float32Array from the JavaScript array,
-    // then use it to fill the current vertex buffer.
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    triangleVertexPositionBuffer.itemSize = 3;
-    triangleVertexPositionBuffer.numItems = 3;
-
-    // SQUARE
-    // Create a buffer for the square's vertices.
-    squareVertexPositionBuffer = gl.createBuffer();
-
-    // Select the squareVertexPositionBuffer as the one to apply vertex
-    // operations to from here out.
-    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-
-    // Now create an array of vertices for the square. Note that the Z
-    // coordinate is always 0 here.
-    vertices = [
-        1.0,  1.0,  0.0,
-        -1.0,  1.0,  0.0,
-        1.0, -1.0,  0.0,
-        -1.0, -1.0,  0.0
-    ];
-
-    // Now pass the list of vertices into WebGL to build the shape. We
-    // do this by creating a Float32Array from the JavaScript array,
-    // then use it to fill the current vertex buffer.
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    squareVertexPositionBuffer.itemSize = 3;
-    squareVertexPositionBuffer.numItems = 4;
 
     // Create Buffers for Imported Object
     cubeVertexPositionBuffer = gl.createBuffer();
@@ -228,33 +182,7 @@ function drawScene() {
     // the center of the scene.
     mat4.identity(mvMatrix);
 
-    // TRIANGLE:
-
-    // Now move the drawing position a bit to where we want to start
-    // drawing the triangle.
     mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
-
-    // Draw the triangle by binding the array buffer to the square's vertices
-    // array, setting attributes, and pushing it to GL.
-    gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    setMatrixUniforms();
-    gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
-
-    // SQUARE:
-
-    // Now move the drawing position a bit to where we want to start
-    // drawing the square
-
-    mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
-    //
-    // // Draw the square by binding the array buffer to the square's vertices
-    // // array, setting attributes, and pushing it to GL.
-    // gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-    // gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    // setMatrixUniforms();
-    // gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
-
 
     // IMPORTED OBJECT
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
