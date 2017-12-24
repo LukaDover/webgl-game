@@ -17,6 +17,10 @@ var cubeVertexTextureBuffer;
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
 
+var r = 0;
+function degToRad(degrees) {
+    return degrees * Math.PI / 180;
+}
 
 //
 // initGL
@@ -183,6 +187,9 @@ function drawScene() {
     mat4.identity(mvMatrix);
 
     mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
+    mat4.rotate(mvMatrix, degToRad(r), [0, 1, 0]);
+    r += 1;
+
 
     // IMPORTED OBJECT
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
