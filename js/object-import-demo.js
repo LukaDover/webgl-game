@@ -194,8 +194,26 @@ function drawScene() {
     gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
-function initObjects() {
-    mesh = new obj_loader.Mesh( document.getElementById( 'mesh' ).innerHTML );
+function downloadMeshes() {
+    var request = new XMLHttpRequest();
+    request.open("GET", "./assets/cube.obj");
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            initObjects(request.responseText);
+        }
+    }
+
+    request.send();
+}
+
+function initObjects(objString) {
+    // mesh = new obj_loader.Mesh( document.getElementById( 'mesh' ).innerHTML );
+    mesh = new obj_loader.Mesh(objString);
+
+    initBuffers();
+
+    // Set up to draw the scene periodically every 15ms.
+    setInterval(drawScene, 15);
 }
 
 //
@@ -221,12 +239,6 @@ function start() {
         // vertices and so forth is established.
         initShaders();
 
-        // Here's where we call the routine that builds all the objects
-        // we'll be drawing.
-        initObjects();
-        initBuffers();
-
-        // Set up to draw the scene periodically every 15ms.
-        setInterval(drawScene, 15);
+        downloadMeshes();
     }
 }
