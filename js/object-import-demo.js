@@ -15,11 +15,14 @@ var cubeVertexTextureBuffer;
 
 var treeVertexIndexBuffer;
 var treeVertexPositionBuffer;
+var treeVertexNormalBuffer;
+var treeVertexTextureBuffer;
 
 
 // Model-View and Projection matrices
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
+var mvMatrix = mat4.create();
 
 var r = 0;
 function degToRad(degrees) {
@@ -124,14 +127,27 @@ function initShaders() {
 
     // store location of aVertexPosition variable defined in shader
     shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+    shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
 
     // turn on vertex position attribute at specified position
     gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
     // store location of uPMatrix variable defined in shader - projection matrix
     shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
     // store location of uMVMatrix variable defined in shader - model-view matrix
     shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    // store location of uNMatrix variable defined in shader - normal matrix
+    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+
+    // store location of uAmbientColor variable defined in shader
+    shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+
+    // store location of uLightingDirection variable defined in shader
+    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
+
+    // store location of uDirectionalColor variable defined in shader
+    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
 }
 
 //
@@ -142,6 +158,11 @@ function initShaders() {
 function setMatrixUniforms() {
     gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
     gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+
+    var normalMatrix = mat3.create();
+    mat4.toInverseMat3(mvMatrix, normalMatrix);
+    mat3.transpose(normalMatrix);
+    gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
 }
 
 //
@@ -181,6 +202,14 @@ function initBuffers() {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(meshes.tree.indices), gl.STATIC_DRAW);
     treeVertexIndexBuffer.itemSize = 1;
     treeVertexIndexBuffer.numItems = meshes.tree.indices.length;
+
+    // Tree normals
+    treeVertexNormalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexNormalBuffer);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(meshes.tree.vertexNormals), gl.STATIC_DRAW);
+    treeVertexNormalBuffer.itemSize = 3;
+    treeVertexNormalBuffer.numItems = meshes.tree.vertexNormals.length / 3;
 }
 
 //
@@ -188,6 +217,32 @@ function initBuffers() {
 //
 // Draw the scene.
 //
+function setLighting() {
+    // set uniforms for lights as defined in the document
+    gl.uniform3f(
+        shaderProgram.ambientColorUniform,
+        0.2,
+        0.2,
+        0.2
+    );
+
+    var lightingDirection = [
+        -0.25,
+        -0.25,
+        -1.0
+    ];
+    var adjustedLD = vec3.create();
+    vec3.normalize(lightingDirection, adjustedLD);
+    vec3.scale(adjustedLD, -1);
+    gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
+
+    gl.uniform3f(
+        shaderProgram.directionalColorUniform,
+        0.8,
+        0.8,
+        0.8
+    );
+}
 function drawScene() {
     // set the rendering environment to full canvas size
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -209,6 +264,7 @@ function drawScene() {
     mat4.rotate(mvMatrix, degToRad(r), [0, 1, 0]);
     r += 1;
 
+    setLighting();
 
     // IMPORTED OBJECT
     // gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
@@ -223,6 +279,10 @@ function drawScene() {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexPositionBuffer);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, treeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    // bind normal buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexNormalBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, treeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     // Draw the cube.
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, treeVertexIndexBuffer);
