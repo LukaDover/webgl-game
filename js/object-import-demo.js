@@ -4,7 +4,7 @@ var gl;
 var shaderProgram;
 
 // Object .obj
-var mesh;
+var meshes;
 
 
 // Buffers
@@ -12,6 +12,10 @@ var cubeVertexPositionBuffer;
 var cubeVertexNormalBuffer;
 var cubeVertexIndexBuffer;
 var cubeVertexTextureBuffer;
+
+var treeVertexIndexBuffer;
+var treeVertexPositionBuffer;
+
 
 // Model-View and Projection matrices
 var mvMatrix = mat4.create();
@@ -152,16 +156,31 @@ function initBuffers() {
     cubeVertexPositionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertices), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(meshes.cube.vertices), gl.STATIC_DRAW);
     cubeVertexPositionBuffer.itemSize = 3;
-    cubeVertexPositionBuffer.numItems = mesh.vertices.length / 3;
+    cubeVertexPositionBuffer.numItems = meshes.cube.vertices.length / 3;
 
     cubeVertexIndexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(meshes.cube.indices), gl.STATIC_DRAW);
     cubeVertexIndexBuffer.itemSize = 1;
-    cubeVertexIndexBuffer.numItems = mesh.indices.length;
+    cubeVertexIndexBuffer.numItems = meshes.cube.indices.length;
+
+
+    treeVertexPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexPositionBuffer);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(meshes.tree.vertices), gl.STATIC_DRAW);
+    treeVertexPositionBuffer.itemSize = 3;
+    treeVertexPositionBuffer.numItems = meshes.tree.vertices.length / 3;
+
+    treeVertexIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, treeVertexIndexBuffer);
+
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(meshes.tree.indices), gl.STATIC_DRAW);
+    treeVertexIndexBuffer.itemSize = 1;
+    treeVertexIndexBuffer.numItems = meshes.tree.indices.length;
 }
 
 //
@@ -186,36 +205,54 @@ function drawScene() {
     // the center of the scene.
     mat4.identity(mvMatrix);
 
-    mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
+    mat4.translate(mvMatrix, [-1.5, 0.0, -15.0]);
     mat4.rotate(mvMatrix, degToRad(r), [0, 1, 0]);
     r += 1;
 
 
     // IMPORTED OBJECT
-    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+    // gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    //
+    // // Draw the cube.
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+    // setMatrixUniforms();
+    // gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
+    // Draw tree
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexPositionBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, treeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     // Draw the cube.
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, treeVertexIndexBuffer);
     setMatrixUniforms();
-    gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, treeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 function downloadMeshes() {
-    var request = new XMLHttpRequest();
-    request.open("GET", "./assets/cube.obj");
-    request.onreadystatechange = function () {
-        if (request.readyState == 4) {
-            initObjects(request.responseText);
-        }
-    }
+    // var request = new XMLHttpRequest();
+    // request.open("GET", "./assets/cube.obj");
+    // request.onreadystatechange = function () {
+    //     if (request.readyState == 4) {
+    //         initObjects(request.responseText);
+    //     }
+    // }
+    $(document).ready(function() {
+        obj_utils.downloadMeshes(
+            {
+                'cube': './assets/cube.obj',
+                'tree': './assets/Tree.obj'
+            },
+            initObjects
+        );
+    });
 
-    request.send();
 }
 
-function initObjects(objString) {
+function initObjects(objMeshes) {
+    meshes = objMeshes;
     // mesh = new obj_loader.Mesh( document.getElementById( 'mesh' ).innerHTML );
-    mesh = new obj_loader.Mesh(objString);
 
     initBuffers();
 
