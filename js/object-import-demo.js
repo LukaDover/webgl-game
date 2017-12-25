@@ -3,6 +3,8 @@ var canvas;
 var gl;
 var shaderProgram;
 
+var currentlyPressedKeys = {};
+
 // Object .obj
 var meshes;
 
@@ -12,6 +14,8 @@ var cubeVertexPositionBuffer;
 var cubeVertexNormalBuffer;
 var cubeVertexIndexBuffer;
 var cubeVertexTextureBuffer;
+
+var cubeForce = new CANNON.Vec3(0, 0, 0);
 
 var treeVertexIndexBuffer;
 var treeVertexPositionBuffer;
@@ -27,6 +31,10 @@ var mvMatrix = mat4.create();
 var r = 0;
 function degToRad(degrees) {
     return degrees * Math.PI / 180;
+}
+
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 
 //
@@ -333,6 +341,29 @@ function initObjects(objMeshes) {
 
 }
 
+function handleKeyDown(event) {
+    console.log(event);
+    currentlyPressedKeys[event.keyCode] = true;
+}
+
+function handleKeyUp(event) {
+    currentlyPressedKeys[event.keyCode] = false;
+}
+
+function handleKeys() {
+    cubeForce = new CANNON.Vec3(0, 0, 0);
+    // if (currentlyPressedKeys[33]) positionCubeZ -= 0.05; // Page up
+    // if (currentlyPressedKeys[34]) positionCubeZ += 0.05; // Page Down
+
+    if (currentlyPressedKeys[37]) cubeForce.x -= 100; // Left
+    if (currentlyPressedKeys[39]) cubeForce.x += 100; // Right
+    if (currentlyPressedKeys[38]) cubeForce.z -= 100; // Up
+    if (currentlyPressedKeys[40]) cubeForce.z += 100; // Down
+
+    console.log("Set cube force to:");
+    console.log(cubeForce.x, cubeForce.y, cubeForce.z);
+}
+
 function simulation() {
     // Setup our world
     var world = new CANNON.World();
@@ -367,8 +398,9 @@ function simulation() {
             var dt = (time - lastTime) / 1000;
             world.step(fixedTimeStep, dt, maxSubSteps);
         }
-        console.log("Cube z position: " + cubeBody.position.z);
-        cubeBody.applyForce(new CANNON.Vec3(0, 0, -100), cubeBody.position);
+        handleKeys()
+        cubeBody.applyForce(cubeForce, cubeBody.position);
+        cubeForce = new CANNON.Vec3(0, 0, 0); // RESET
         lastTime = time;
         drawScene()
     })();
@@ -392,6 +424,9 @@ function start() {
         gl.clearDepth(1.0);                                     // Clear everything
         gl.enable(gl.DEPTH_TEST);                               // Enable depth testing
         gl.depthFunc(gl.LEQUAL);                                // Near things obscure far things
+
+        document.onkeydown = handleKeyDown;
+        document.onkeyup = handleKeyUp;
 
         // Initialize the shaders; this is where all the lighting for the
         // vertices and so forth is established.
