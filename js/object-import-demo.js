@@ -271,6 +271,8 @@ function drawScene() {
 
     mat4.translate(mvMatrix, [-1.5, 0.0, -15.0]);
 
+    mat4.translate(mvMatrix, [meshes.cube.cubeBody.position.x, meshes.cube.cubeBody.position.y, meshes.cube.cubeBody.position.z]);
+
     setLighting();
 
     // IMPORTED CUBE
@@ -328,8 +330,7 @@ function initObjects(objMeshes) {
     initBuffers();
     simulation();
 
-    // Set up to draw the scene periodically every 15ms.
-    setInterval(drawScene, 15);
+
 }
 
 function simulation() {
@@ -337,14 +338,15 @@ function simulation() {
     var world = new CANNON.World();
     world.gravity.set(0, 0, -9.82); // m/s²
 
-// Create a sphere
-    var radius = 1; // m
-    var sphereBody = new CANNON.Body({
+// Create a cube
+    var cubeBody = new CANNON.Body({
         mass: 5, // kg
         position: new CANNON.Vec3(0, 0, 10), // m
-        shape: new CANNON.Sphere(radius)
+        shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
     });
-    world.add(sphereBody);
+    world.add(cubeBody);
+
+    meshes.cube.cubeBody = cubeBody;
 
 // Create a plane
     var groundBody = new CANNON.Body({
@@ -365,9 +367,10 @@ function simulation() {
             var dt = (time - lastTime) / 1000;
             world.step(fixedTimeStep, dt, maxSubSteps);
         }
-        console.log("Sphere z position: " + sphereBody.position.z);
-        sphereBody.applyForce(new CANNON.Vec3(0, 0, 100), sphereBody.position);
+        console.log("Cube z position: " + cubeBody.position.z);
+        cubeBody.applyForce(new CANNON.Vec3(0, 0, -100), cubeBody.position);
         lastTime = time;
+        drawScene()
     })();
 }
 
