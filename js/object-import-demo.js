@@ -173,7 +173,7 @@ function setMatrixUniforms() {
 //
 function initBuffers() {
 
-    // Create Buffers for Imported Object
+    // Create Buffers for Imported Cube
     cubeVertexPositionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 
@@ -188,6 +188,15 @@ function initBuffers() {
     cubeVertexIndexBuffer.itemSize = 1;
     cubeVertexIndexBuffer.numItems = meshes.cube.indices.length;
 
+    // Cube normals
+    cubeVertexNormalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(meshes.cube.vertexNormals), gl.STATIC_DRAW);
+    cubeVertexNormalBuffer.itemSize = 3;
+    cubeVertexNormalBuffer.numItems = meshes.cube.vertexNormals.length / 3;
+
+    // Create buffers for tree
 
     treeVertexPositionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexPositionBuffer);
@@ -261,33 +270,35 @@ function drawScene() {
     mat4.identity(mvMatrix);
 
     mat4.translate(mvMatrix, [-1.5, 0.0, -15.0]);
-    mat4.rotate(mvMatrix, degToRad(r), [0, 1, 0]);
-    r += 1;
 
     setLighting();
 
-    // IMPORTED OBJECT
-    // gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-    // gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    //
-    // // Draw the cube.
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-    // setMatrixUniforms();
-    // gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-
-    // Draw tree
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexPositionBuffer);
-    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, treeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    // IMPORTED CUBE
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     // bind normal buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexNormalBuffer);
-    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, treeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, cubeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     // Draw the cube.
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, treeVertexIndexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
     setMatrixUniforms();
-    gl.drawElements(gl.TRIANGLES, treeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
+    // Draw tree
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexPositionBuffer);
+    // gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, treeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    //
+    // // bind normal buffer
+    // gl.bindBuffer(gl.ARRAY_BUFFER, treeVertexNormalBuffer);
+    // gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, treeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    //
+    // // Draw the cube.
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, treeVertexIndexBuffer);
+    // setMatrixUniforms();
+    // gl.drawElements(gl.TRIANGLES, treeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 function downloadMeshes() {
