@@ -398,11 +398,11 @@ function simulation() {
             var dt = (time - lastTime) / 1000;
             world.step(fixedTimeStep, dt, maxSubSteps);
         }
-        handleKeys()
+        handleKeys();
         cubeBody.applyForce(cubeForce, cubeBody.position);
         cubeForce = new CANNON.Vec3(0, 0, 0); // RESET
         lastTime = time;
-        drawScene()
+        drawScene();
     })();
 }
 
