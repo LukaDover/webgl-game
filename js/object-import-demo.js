@@ -328,7 +328,6 @@ function downloadMeshes() {
             initObjects
         );
     });
-
 }
 
 function initObjects(objMeshes) {
@@ -357,8 +356,8 @@ function handleKeys() {
 
     if (currentlyPressedKeys[37]) cubeForce.x -= 100; // Left
     if (currentlyPressedKeys[39]) cubeForce.x += 100; // Right
-    if (currentlyPressedKeys[38]) cubeForce.z -= 100; // Up
-    if (currentlyPressedKeys[40]) cubeForce.z += 100; // Down
+    if (currentlyPressedKeys[38]) cubeForce.y -= 100; // Up
+    if (currentlyPressedKeys[40]) cubeForce.y += 100; // Down
 
     console.log("Set cube force to:");
     console.log(cubeForce.x, cubeForce.y, cubeForce.z);
@@ -373,7 +372,7 @@ function simulation() {
     var cubeBody = new CANNON.Body({
         mass: 5, // kg
         position: new CANNON.Vec3(0, 0, 10), // m
-        shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
+        shape: new CANNON.Sphere(1)
     });
     world.add(cubeBody);
 
