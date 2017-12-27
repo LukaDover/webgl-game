@@ -26,8 +26,9 @@ function simulation() {
 
 // Create a plane
     let groundBody = new CANNON.Body({
-        mass: 0 // mass == 0 makes the body static
-    });
+        mass: 0, // mass == 0 makes the body static
+        position: new CANNON.Vec3(0, 0, -20)
+});
     let groundShape = new CANNON.Plane();
     groundBody.addShape(groundShape);
     world.add(groundBody);
@@ -48,7 +49,6 @@ function simulation() {
         lastTime = time;
         cube.transform();
         cube.render();
-        // console.log('At: ' + cube.body.position);
     })();
 }
 

@@ -41,9 +41,7 @@ export class GameObject {
      * @param s - scaling matrix
      */
     setInitialPosition(t, r, s) {
-        mat4.translate(this.mvMatrix, t);
-        mat4.translate(this.mvMatrix, r);
-        mat4.translate(this.mvMatrix, s);
+        throw Error('Not Implemented');
     }
 }
 
