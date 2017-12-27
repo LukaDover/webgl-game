@@ -16,8 +16,10 @@ export function computeForce() {
 
     if (currentlyPressedKeys[37]) force.x -= responseForce; // Left
     if (currentlyPressedKeys[39]) force.x += responseForce; // Right
-    if (currentlyPressedKeys[38]) force.z -= responseForce; // Up
-    if (currentlyPressedKeys[40]) force.z += responseForce; // Down
+    if (currentlyPressedKeys[38]) force.y -= responseForce; // Up
+    if (currentlyPressedKeys[40]) force.y += responseForce; // Down
+    if (currentlyPressedKeys[33]) force.z += responseForce; // Page Up
+    if (currentlyPressedKeys[34]) force.z -= responseForce; // Page Down
 
     return force;
 }
