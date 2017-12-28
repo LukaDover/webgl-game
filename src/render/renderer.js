@@ -13,6 +13,9 @@ export class Renderer {
 
         // Clear the canvas before we start drawing on it.
         glContext.clear(glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT);
+
+        let lighting = LightingManager.instance;
+        lighting.setLighting();
     }
 
     static drawObject(mesh) {
@@ -28,8 +31,6 @@ export class Renderer {
         //
         // mat4.translate(mvMatrix, [meshes.cube.cubeBody.position.x, meshes.cube.cubeBody.position.y, meshes.cube.cubeBody.position.z]);
 
-        let lighting = LightingManager.instance;
-        lighting.setLighting();
 
         // IMPORTED MESH
         glContext.bindBuffer(glContext.ARRAY_BUFFER, mesh.vertexBuffer);

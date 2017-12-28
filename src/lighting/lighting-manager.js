@@ -32,7 +32,7 @@ export class LightingManager {
             -1.0
         ];
         let adjustedLD = vec3.create();
-        vec3.normalize(lightingDirection, adjustedLD);
+        vec3.normalize(adjustedLD, lightingDirection);
         vec3.scale(adjustedLD, adjustedLD, -1);
         glContext.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
 
