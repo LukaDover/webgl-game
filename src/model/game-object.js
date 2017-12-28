@@ -91,4 +91,8 @@ export class StationaryObject extends GameObject {
         super(dataPath);
         this.body = Collider.getStaticBodyFromMesh(this.mesh);
     }
+
+    setPosition() {
+        mat4.translate(this.mvMatrix, this.mvMatrix, [this.body.position.x, this.body.position.y, this.body.position.z]);
+    }
 }

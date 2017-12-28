@@ -1,8 +1,9 @@
 // Main loop of the game
 import {glContext, initGL, initShaderProgram, pMatrix} from "./common/common";
 import * as keyboard from './keyboard/keyboard-handler';
-import {MovingObject} from "./model/game-object";
+import {MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
+import {Renderer} from "./render/renderer";
 var CANNON = require('cannon');
 
 
@@ -15,7 +16,7 @@ function simulation() {
 // Create a cube
     let cubeBody = new CANNON.Body({
         mass: 5, // kg
-        position: new CANNON.Vec3(0, 0, 10), // m
+        position: new CANNON.Vec3(0, 0, 0), // m
         shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
     });
     world.add(cubeBody);
@@ -25,12 +26,16 @@ function simulation() {
     cube.body = cubeBody;
 
 // Create a plane
+    let ground = new StationaryObject('./blender/ground.obj');
+    ground.initializeBuffers();
     let groundBody = new CANNON.Body({
         mass: 0, // mass == 0 makes the body static
         position: new CANNON.Vec3(0, 0, -20)
 });
     let groundShape = new CANNON.Plane();
     groundBody.addShape(groundShape);
+    ground.body = groundBody;
+    ground.setPosition();
     world.add(groundBody);
 
     let fixedTimeStep = 1.0 / 60.0; // seconds
@@ -48,6 +53,8 @@ function simulation() {
         cube.body.applyForce(keyboard.computeForce(), cube.body.position);
         lastTime = time;
         cube.transform();
+        Renderer.drawScene();
+        ground.render();
         cube.render();
     })();
 }
