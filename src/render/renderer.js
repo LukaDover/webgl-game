@@ -1,17 +1,22 @@
 import {glContext, setPerspective} from "../common/common";
 import {LightingManager} from "../lighting/lighting-manager";
+import {ShaderLoader} from "../shader/shader-loader";
 import {shaderProgram} from "../common/common";
 
 export class Renderer {
     constructor() {
         
     }
-    
-    static drawObject(mesh) {
+
+    static drawScene() {
         glContext.viewport(0, 0, glContext.viewportWidth, glContext.viewportHeight);
 
         // Clear the canvas before we start drawing on it.
         glContext.clear(glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT);
+    }
+
+    static drawObject(mesh) {
+
 
         setPerspective(45, 0.1, 100);
 
