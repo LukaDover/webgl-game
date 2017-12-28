@@ -1,11 +1,10 @@
-import {Mesh} from '../model/mesh';
 import {glContext} from "../common/common";
-
+let OBJ = require('webgl-obj-loader');
 
 export class BufferManager {
 
     constructor(mesh) {
-        if (mesh.constructor.name !== Mesh.name) {
+        if (mesh.constructor.name !== OBJ.Mesh.name) {
             throw "Invalid object type. Expecting Mesh instance"; // TODO: create exception
         }
 
@@ -25,9 +24,9 @@ export class VertexBufferManager extends BufferManager {
     initializeMeshBuffer() {
         let buffer = glContext.createBuffer();
         glContext.bindBuffer(glContext.ARRAY_BUFFER, buffer);
-        glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(this.mesh.vertexPositions), glContext.STATIC_DRAW);
+        glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(this.mesh.vertices), glContext.STATIC_DRAW);
         buffer.itemSize = 3;
-        buffer.numItems = this.mesh.vertexPositions.length / 3;
+        buffer.numItems = this.mesh.vertices.length / 3;
 
         return buffer;
     }
@@ -41,9 +40,9 @@ export class TextureBufferManager extends BufferManager {
     initializeMeshBuffer() {
         let buffer = glContext.createBuffer();
         glContext.bindBuffer(glContext.ARRAY_BUFFER, buffer);
-        glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(this.mesh.vertexTextures), glContext.STATIC_DRAW);
+        glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array(this.mesh.textures), glContext.STATIC_DRAW);
         buffer.itemSize = 2;
-        buffer.numItems = this.mesh.vertexTextures.length / 2;
+        buffer.numItems = this.mesh.textures.length / 2;
 
         return buffer;
     }
