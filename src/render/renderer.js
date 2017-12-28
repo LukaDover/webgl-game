@@ -1,6 +1,5 @@
 import {glContext, setPerspective} from "../common/common";
 import {LightingManager} from "../lighting/lighting-manager";
-import {ShaderLoader} from "../shader/shader-loader";
 import {shaderProgram} from "../common/common";
 
 export class Renderer {
@@ -8,7 +7,7 @@ export class Renderer {
         
     }
     
-    static drawObject(object) {
+    static drawObject(mesh) {
         glContext.viewport(0, 0, glContext.viewportWidth, glContext.viewportHeight);
 
         // Clear the canvas before we start drawing on it.
@@ -27,17 +26,17 @@ export class Renderer {
         let lighting = LightingManager.instance;
         lighting.setLighting();
 
-        // IMPORTED OBJECT
-        glContext.bindBuffer(glContext.ARRAY_BUFFER, object.vertexBuffer);
-        glContext.vertexAttribPointer(shaderProgram.vertexPositionAttribute, object.vertexBuffer.itemSize, glContext.FLOAT, false, 0, 0);
+        // IMPORTED MESH
+        glContext.bindBuffer(glContext.ARRAY_BUFFER, mesh.vertexBuffer);
+        glContext.vertexAttribPointer(shaderProgram.vertexPositionAttribute, mesh.vertexBuffer.itemSize, glContext.FLOAT, false, 0, 0);
 
         // bind normal buffer
-        glContext.bindBuffer(glContext.ARRAY_BUFFER, object.normalBuffer);
-        glContext.vertexAttribPointer(shaderProgram.vertexNormalAttribute, object.normalBuffer.itemSize, glContext.FLOAT, false, 0, 0);
+        glContext.bindBuffer(glContext.ARRAY_BUFFER, mesh.normalBuffer);
+        glContext.vertexAttribPointer(shaderProgram.vertexNormalAttribute, mesh.normalBuffer.itemSize, glContext.FLOAT, false, 0, 0);
 
         // bind index buffer
-        glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, object.indexBuffer);
+        glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
 
-        glContext.drawElements(glContext.TRIANGLES, object.indexBuffer.numItems, glContext.UNSIGNED_SHORT, 0);
+        glContext.drawElements(glContext.TRIANGLES, mesh.indexBuffer.numItems, glContext.UNSIGNED_SHORT, 0);
     }
 }

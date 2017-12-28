@@ -1,9 +1,6 @@
 import {ObjectLoader} from "./object-loader";
 import {Collider} from "../collider/collider";
-import {
-    IndexBufferManager, NormalBufferManager, TextureBufferManager,
-    VertexBufferManager
-} from "../shader/buffer-manager";
+import {BufferManager} from "../shader/buffer-manager";
 import {Renderer} from "../render/renderer";
 import {ShaderLoader} from "../shader/shader-loader";
 
@@ -20,7 +17,7 @@ export class GameObject {
 
     render() {
         this.setMatrixUniforms();
-        Renderer.drawObject(this);
+        Renderer.drawObject(this.mesh);
     }
 
     setMatrixUniforms() {
@@ -28,10 +25,8 @@ export class GameObject {
     }
 
     initializeBuffers() {
-        this.vertexBuffer = new VertexBufferManager(this.mesh).initializeMeshBuffer();
-        this.normalBuffer = new NormalBufferManager(this.mesh).initializeMeshBuffer();
-        this.textureBuffer = new TextureBufferManager(this.mesh).initializeMeshBuffer();
-        this.indexBuffer = new IndexBufferManager(this.mesh).initializeMeshBuffer();
+        this.bufferManager = new BufferManager(this.mesh);
+        this.bufferManager.initializeMeshBuffers();
     }
 
     /**
