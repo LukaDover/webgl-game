@@ -5,7 +5,7 @@ let mat4 = require('gl-matrix').mat4;
 export class Camera {
     constructor() {
         this.cameraMatrix = mat4.identity(mat4.create());
-        this.viewMatrix =  mat4.identity(mat4.create());
+        this.viewMatrixUniform =  mat4.identity(mat4.create());
     }
 
     computeCameraMatrix() {
@@ -13,9 +13,9 @@ export class Camera {
     }
 
     getViewMatrix() {
-        this.viewMatrix =  mat4.identity(mat4.create());
-        mat4.invert(this.viewMatrix, this.cameraMatrix);
-        return this.viewMatrix;
+        this.viewMatrixUniform =  mat4.identity(mat4.create());
+        mat4.invert(this.viewMatrixUniform, this.cameraMatrix);
+        return this.viewMatrixUniform;
     }
 
     translate(vector3) {

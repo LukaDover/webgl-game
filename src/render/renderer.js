@@ -23,15 +23,6 @@ export class Renderer {
 
         setPerspective(45, 0.1, 100);
 
-        // // Set the drawing position to the "identity" point, which is
-        // // the center of the scene.
-        // mat4.identity(mvMatrix);
-        //
-        // mat4.translate(mvMatrix, [-1.5, 0.0, -15.0]);
-        //
-        // mat4.translate(mvMatrix, [meshes.cube.cubeBody.position.x, meshes.cube.cubeBody.position.y, meshes.cube.cubeBody.position.z]);
-
-
         // IMPORTED MESH
         glContext.bindBuffer(glContext.ARRAY_BUFFER, mesh.vertexBuffer);
         glContext.vertexAttribPointer(shaderProgram.vertexPositionAttribute, mesh.vertexBuffer.itemSize, glContext.FLOAT, false, 0, 0);

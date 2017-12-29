@@ -31,14 +31,14 @@ export class ShaderLoader {
         glContext.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
         // store location of uPMatrix variable defined in shader - projection matrix
-        shaderProgram.pMatrixUniform = glContext.getUniformLocation(shaderProgram, "uPMatrix");
+        shaderProgram.projectionMatrixUniform = glContext.getUniformLocation(shaderProgram, "uProjectionMatrix");
         // store location of uMVMatrix variable defined in shader - model-view matrix
-        shaderProgram.mvMatrixUniform = glContext.getUniformLocation(shaderProgram, "uMVMatrix");
+        shaderProgram.modelMatrixUniform = glContext.getUniformLocation(shaderProgram, "uModelMatrix");
 
-        shaderProgram.viewMatrix = glContext.getUniformLocation(shaderProgram, "viewMatrix");
+        shaderProgram.viewMatrixUniform = glContext.getUniformLocation(shaderProgram, "uViewMatrix");
 
         // store location of uNMatrix variable defined in shader - normal matrix
-        shaderProgram.nMatrixUniform = glContext.getUniformLocation(shaderProgram, "uNMatrix");
+        shaderProgram.normalMatrixUniform = glContext.getUniformLocation(shaderProgram, "uNormalMatrix");
 
         // store location of uAmbientColor variable defined in shader
         shaderProgram.ambientColorUniform = glContext.getUniformLocation(shaderProgram, "uAmbientColor");
@@ -100,19 +100,19 @@ export class ShaderLoader {
     }
 
     static setMatrixUniforms(mvMatrix) {
-        glContext.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        glContext.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+        glContext.uniformMatrix4fv(shaderProgram.projectionMatrixUniform, false, pMatrix);
+        glContext.uniformMatrix4fv(shaderProgram.modelMatrixUniform, false, mvMatrix);
 
         let normalMatrix = mat3.create();
         mat3.normalFromMat4(normalMatrix, mvMatrix);
 
-        glContext.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+        glContext.uniformMatrix3fv(shaderProgram.normalMatrixUniform, false, normalMatrix);
 
 
     }
 
     static setViewMatrixUniform(viewMatrix) {
-        glContext.uniformMatrix4fv(shaderProgram.viewMatrix, false, viewMatrix);
+        glContext.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, viewMatrix);
     }
 }
 
