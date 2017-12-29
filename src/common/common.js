@@ -37,7 +37,7 @@ export function initGL() {
     if (glContext) {
         glContext.clearColor(0.0, 0.0, 0.0, 1.0);                      // Set clear color to black, fully opaque
         glContext.clearDepth(1.0);                                     // Clear everything
-        glContext.enable(glContext.DEPTH_TEST);                               // Enable depth testing
+        glContext.enable(glContext.DEPTH_TEST);                        // Enable depth testing
         glContext.depthFunc(glContext.LEQUAL);
     }
 }
