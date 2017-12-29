@@ -4,6 +4,9 @@ import * as keyboard from './keyboard/keyboard-handler';
 import {MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
 import {Renderer} from "./render/renderer";
+import {Vehicle} from "./model/vehicle/vehicle";
+import {Handler} from "./keyboard/keyboard-handler";
+import {initKeyboard} from "./keyboard/keyboard-handler";
 var CANNON = require('cannon');
 
 
@@ -12,31 +15,53 @@ function simulation() {
     // Setup our world
     let world = new CANNON.World();
     world.gravity.set(0, 0, -9.82); // m/s²
+    world.defaultContactMaterial.friction = 0;
 
-// Create a cube
-    let cubeBody = new CANNON.Body({
-        mass: 5, // kg
-        position: new CANNON.Vec3(0, 0, 0), // m
-        shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
-    });
-    world.add(cubeBody);
 
-    let cube = new MovingObject('./blender/cube.obj');
-    cube.initializeBuffers();
-    cube.body = cubeBody;
+    let vehicle = new Vehicle('./blender/cube.obj');
+    vehicle.initializeBuffers();
+    vehicle.initializeVehicle();
 
 // Create a plane
     let ground = new StationaryObject('./blender/ground.obj');
     ground.initializeBuffers();
     let groundBody = new CANNON.Body({
         mass: 0, // mass == 0 makes the body static
-        position: new CANNON.Vec3(0, 0, -20)
+        position: new CANNON.Vec3(0, 0, -20),
+        material:  new CANNON.Material("groundMaterial")
 });
     let groundShape = new CANNON.Plane();
     groundBody.addShape(groundShape);
     ground.body = groundBody;
     ground.setPosition();
     world.add(groundBody);
+
+    // Contact material
+    let wheelGroundContactMaterial = new CANNON.ContactMaterial(
+        vehicle.wheelMaterial,
+        groundBody.material,
+        {
+            friction: 0.3,
+            restitution: 0,
+            contactEquationStiffness: 1000
+        }
+    );
+
+    world.addContactMaterial(wheelGroundContactMaterial);
+
+    vehicle.vehicle.addToWorld(world);
+
+    world.addEventListener('postStep', function(){
+        for (let i = 0; i < vehicle.vehicle.wheelInfos.length; i++) {
+            vehicle.vehicle.updateWheelTransform(i);
+            let t = vehicle.vehicle.wheelInfos[i].worldTransform;
+            vehicle.wheelBodies[i].position.copy(t.position);
+            vehicle.wheelBodies[i].quaternion.copy(t.quaternion);
+        }
+    });
+
+    let keyboardHandler = new Handler(vehicle.vehicle);
+    initKeyboard(keyboardHandler);
 
     let fixedTimeStep = 1.0 / 60.0; // seconds
     let maxSubSteps = 3;
@@ -50,12 +75,12 @@ function simulation() {
             world.step(fixedTimeStep, dt, maxSubSteps);
         }
 
-        cube.body.applyForce(keyboard.computeForce(), cube.body.position);
+        // vehicle.body.applyForce(keyboard.computeForce(), vehicle.body.position);
         lastTime = time;
-        cube.transform();
+        vehicle.transform();
         Renderer.drawScene();
         ground.render();
-        cube.render();
+        vehicle.render();
     })();
 }
 
