@@ -1,4 +1,5 @@
 import {MovingObject} from "../game-object";
+import {DUMMYPATH} from "../../common/path";
 
 let CANNON = require('cannon');
 
@@ -17,40 +18,11 @@ export class Vehicle extends MovingObject {
         this.chassisBody.position.set(0, 0, 4);
         this.chassisBody.angularVelocity.set(0, 0, 0.5);
 
-        let options = {
-            radius: 0.5,
-            directionLocal: new CANNON.Vec3(0, 0, -1),
-            suspensionStiffness: 30,
-            suspensionRestLength: 0.3,
-            frictionSlip: 5,
-            dampingRelaxation: 2.3,
-            dampingCompression: 4.4,
-            maxSuspensionForce: 100000,
-            rollInfluence:  0.01,
-            axleLocal: new CANNON.Vec3(0, 1, 0),
-            chassisConnectionPointLocal: new CANNON.Vec3(1, 1, 0),
-            maxSuspensionTravel: 0.3,
-            customSlidingRotationalSpeed: -30,
-            useCustomSlidingRotationalSpeed: true
-        };
-
         this.vehicle = new CANNON.RaycastVehicle({
             chassisBody: this.chassisBody,
         });
 
-        options.chassisConnectionPointLocal.set(1, 1, 0);
-        this.vehicle.addWheel(options);
-
-        options.chassisConnectionPointLocal.set(1, -1, 0);
-        this.vehicle.addWheel(options);
-
-        options.chassisConnectionPointLocal.set(-1, 1, 0);
-        this.vehicle.addWheel(options);
-
-        options.chassisConnectionPointLocal.set(-1, -1, 0);
-        this.vehicle.addWheel(options);
-
-
+        this.addWheels();
 
         this.wheelBodies = [];
         for(let i=0; i<this.vehicle.wheelInfos.length; i++){
@@ -63,6 +35,69 @@ export class Vehicle extends MovingObject {
             this.wheelBodies.push(wheelBody);
         }
     }
+
+    // Order in which the wheels are added matters
+    addWheels() {
+        this.frontRightWheel = new FrontRightWheel(DUMMYPATH);
+        this.backRightWheel = new BackRightWheel(DUMMYPATH);
+        this.frontLeftWheel = new FrontLeftWheel(DUMMYPATH);
+        this.backLeftWheel = new BackLeftWheel(DUMMYPATH);
+
+        this.vehicle.addWheel(this.frontRightWheel.attributes);
+        this.vehicle.addWheel(this.frontLeftWheel.attributes);
+        this.vehicle.addWheel(this.backRightWheel.attributes);
+        this.vehicle.addWheel(this.backLeftWheel.attributes);
+        console.log(this.vehicle.wheelInfos)
+    }
 }
 
+export class Wheel extends MovingObject {
+    constructor(dataPath, chassisConnectionPointsLocal) {
+        super(dataPath);
+        this.body = new CANNON.Body({ mass: 1 });
+        this.attributes = {
+            radius: 0.5,
+            directionLocal: new CANNON.Vec3(0, 0, -1),
+            suspensionStiffness: 30,
+            suspensionRestLength: 0.3,
+            frictionSlip: 5,
+            dampingRelaxation: 2.3,
+            dampingCompression: 4.4,
+            maxSuspensionForce: 100000,
+            rollInfluence:  0.01,
+            axleLocal: new CANNON.Vec3(0, 1, 0),
+            chassisConnectionPointLocal: chassisConnectionPointsLocal,
+            maxSuspensionTravel: 0.3,
+            customSlidingRotationalSpeed: -30,
+            useCustomSlidingRotationalSpeed: true
+        }
+    }
+}
 
+class FrontLeftWheel extends Wheel {
+    constructor(dataPath) {
+        super(dataPath, new CANNON.Vec3(1, 1, 0));
+
+    }
+}
+
+class FrontRightWheel extends Wheel {
+    constructor(dataPath) {
+        super(dataPath, new CANNON.Vec3(1, -1, 0));
+
+    }
+}
+
+class BackLeftWheel extends Wheel {
+    constructor(dataPath) {
+        super(dataPath, new CANNON.Vec3(-1, 1, 0));
+
+    }
+}
+
+class BackRightWheel extends Wheel {
+    constructor(dataPath) {
+        super(dataPath, new CANNON.Vec3(-1, -1, 0));
+
+    }
+}
