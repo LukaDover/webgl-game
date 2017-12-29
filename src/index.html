@@ -22,9 +22,10 @@
         attribute vec3 aVertexPosition;
         attribute vec3 aVertexNormal;
 
-        uniform mat4 uMVMatrix; // Model-View Matrix
-        uniform mat4 uPMatrix;  // Projection Matrix
-        uniform mat3 uNMatrix; // Normal matrix
+        uniform mat4 uModelMatrix;
+        uniform mat4 uProjectionMatrix;
+        uniform mat3 uNormalMatrix;
+        uniform mat4 uViewMatrix;
 
         uniform vec3 uAmbientColor;	// ambient color uniform
         uniform vec3 uDirectionalColor;		// light color
@@ -33,9 +34,9 @@
         varying vec3 vLightWeighting;
 
         void main(void) {
-            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 
-            vec3 transformedNormal = uNMatrix * aVertexNormal;
+            vec3 transformedNormal = uNormalMatrix * aVertexNormal;
 
             // calculate weight for directional light
 		    float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
