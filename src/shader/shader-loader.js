@@ -34,6 +34,9 @@ export class ShaderLoader {
         shaderProgram.pMatrixUniform = glContext.getUniformLocation(shaderProgram, "uPMatrix");
         // store location of uMVMatrix variable defined in shader - model-view matrix
         shaderProgram.mvMatrixUniform = glContext.getUniformLocation(shaderProgram, "uMVMatrix");
+
+        shaderProgram.viewMatrix = glContext.getUniformLocation(shaderProgram, "viewMatrix");
+
         // store location of uNMatrix variable defined in shader - normal matrix
         shaderProgram.nMatrixUniform = glContext.getUniformLocation(shaderProgram, "uNMatrix");
 
@@ -106,6 +109,10 @@ export class ShaderLoader {
         glContext.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
 
 
+    }
+
+    static setViewMatrixUniform(viewMatrix) {
+        glContext.uniformMatrix4fv(shaderProgram.viewMatrix, false, viewMatrix);
     }
 }
 

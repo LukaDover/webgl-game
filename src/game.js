@@ -7,6 +7,8 @@ import {Renderer} from "./render/renderer";
 import {Vehicle} from "./model/vehicle/vehicle";
 import {Handler} from "./keyboard/keyboard-handler";
 import {initKeyboard} from "./keyboard/keyboard-handler";
+import {Camera} from "./model/camera/camera";
+import {MouseHandler} from "./keyboard/keyboard-handler";
 var CANNON = require('cannon');
 
 
@@ -56,6 +58,13 @@ function simulation() {
     let keyboardHandler = new Handler(vehicle.vehicle);
     initKeyboard(keyboardHandler);
 
+    // Create a camera
+    let camera = new Camera();
+
+    let mouseHandler = new MouseHandler(camera);
+    let handleEvent = mouseHandler.handleEvent.bind(mouseHandler);
+    document.onmousemove = handleEvent;
+
     let fixedTimeStep = 1.0 / 60.0; // seconds
     let maxSubSteps = 3;
 
@@ -71,6 +80,7 @@ function simulation() {
         lastTime = time;
         vehicle.transform();
         Renderer.drawScene();
+        camera.setUniforms();
         ground.render();
         vehicle.render();
     })();

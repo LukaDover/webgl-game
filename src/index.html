@@ -25,6 +25,7 @@
         uniform mat4 uMVMatrix; // Model-View Matrix
         uniform mat4 uPMatrix;  // Projection Matrix
         uniform mat3 uNMatrix; // Normal matrix
+        uniform mat4 viewMatrix;
 
         uniform vec3 uAmbientColor;	// ambient color uniform
         uniform vec3 uDirectionalColor;		// light color
@@ -33,7 +34,7 @@
         varying vec3 vLightWeighting;
 
         void main(void) {
-            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            gl_Position = uPMatrix * viewMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 
             vec3 transformedNormal = uNMatrix * aVertexNormal;
 
