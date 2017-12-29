@@ -68,7 +68,6 @@ function simulation() {
             world.step(fixedTimeStep, dt, maxSubSteps);
         }
 
-        // vehicle.body.applyForce(keyboard.computeForce(), vehicle.body.position);
         lastTime = time;
         vehicle.transform();
         Renderer.drawScene();
