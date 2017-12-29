@@ -49,6 +49,15 @@ export class Vehicle extends MovingObject {
         this.vehicle.addWheel(this.backLeftWheel.attributes);
         console.log(this.vehicle.wheelInfos)
     }
+
+    update() {
+        for (let i = 0; i < this.vehicle.wheelInfos.length; i++) {
+            this.vehicle.updateWheelTransform(i);
+            let t = this.vehicle.wheelInfos[i].worldTransform;
+            this.wheelBodies[i].position.copy(t.position);
+            this.wheelBodies[i].quaternion.copy(t.quaternion);
+        }
+    }
 }
 
 export class Wheel extends MovingObject {

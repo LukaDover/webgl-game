@@ -51,15 +51,8 @@ function simulation() {
 
     vehicle.vehicle.addToWorld(world);
 
-    world.addEventListener('postStep', function(){
-        for (let i = 0; i < vehicle.vehicle.wheelInfos.length; i++) {
-            vehicle.vehicle.updateWheelTransform(i);
-            let t = vehicle.vehicle.wheelInfos[i].worldTransform;
-            vehicle.wheelBodies[i].position.copy(t.position);
-            vehicle.wheelBodies[i].quaternion.copy(t.quaternion);
-        }
-    });
-
+    let update = vehicle.update.bind(vehicle);
+    world.addEventListener('postStep', update);
     let keyboardHandler = new Handler(vehicle.vehicle);
     initKeyboard(keyboardHandler);
 
