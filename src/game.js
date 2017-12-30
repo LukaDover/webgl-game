@@ -1,14 +1,13 @@
 // Main loop of the game
 import {glContext, initGL, initShaderProgram, pMatrix} from "./common/common";
-import * as keyboard from './keyboard/keyboard-handler';
 import {MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
 import {Renderer} from "./render/renderer";
 import {Vehicle} from "./model/vehicle/vehicle";
-import {Handler} from "./keyboard/keyboard-handler";
-import {initKeyboard} from "./keyboard/keyboard-handler";
-import {Camera} from "./model/camera/camera";
-import {MouseHandler} from "./keyboard/keyboard-handler";
+import {Handler} from "./interface/keyboard-handler";
+import {initKeyboard} from "./interface/keyboard-handler";
+import {Camera, MovingCamera} from "./model/camera/camera";
+import {MouseHandler} from "./interface/mouse-handler";
 var CANNON = require('cannon');
 
 
@@ -59,11 +58,13 @@ function simulation() {
     initKeyboard(keyboardHandler);
 
     // Create a camera
-    let camera = new Camera();
+    let camera = new MovingCamera(vehicle);
 
     let mouseHandler = new MouseHandler(camera);
     let handleEvent = mouseHandler.handleEvent.bind(mouseHandler);
+    let handleScroll = mouseHandler.handleScroll.bind(mouseHandler);
     document.onmousemove = handleEvent;
+    document.onwheel = handleScroll;
 
     let fixedTimeStep = 1.0 / 60.0; // seconds
     let maxSubSteps = 3;

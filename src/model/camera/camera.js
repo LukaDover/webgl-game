@@ -8,10 +8,6 @@ export class Camera {
         this.viewMatrixUniform =  mat4.identity(mat4.create());
     }
 
-    computeCameraMatrix() {
-
-    }
-
     getViewMatrix() {
         this.viewMatrixUniform =  mat4.identity(mat4.create());
         mat4.invert(this.viewMatrixUniform, this.cameraMatrix);
@@ -29,5 +25,44 @@ export class Camera {
     setUniforms() {
         let viewMatrix = this.getViewMatrix();
         ShaderLoader.setViewMatrixUniform(viewMatrix);
+    }
+}
+
+
+export class MovingCamera extends Camera {
+    constructor(movingObject) {
+        super();
+            this.movingObject = movingObject;
+            this.zoomMatrix = mat4.identity(mat4.create()); // translational matrix
+            this.rotationMatrix = mat4.identity(mat4.create());
+    }
+
+    translate(vector3) {
+        mat4.translate(this.zoomMatrix, this.zoomMatrix, vector3);
+    }
+
+    rotate(rad, vector3) {
+        mat4.rotate(this.rotationMatrix, this.rotationMatrix, rad, vector3);
+    }
+
+    transform() {
+        // zoom perseveres, rotation perseveres, object translation + rotation changes
+        let objectTranslation = this.movingObject.translationMatrix;
+        let objectRotation = this.movingObject.rotationMatrix;
+
+        let finT = mat4.identity(mat4.create());
+        mat4.multiply(finT, this.zoomMatrix, objectTranslation);
+
+        let finR = mat4.identity(mat4.create());
+        mat4.multiply(finR, this.rotationMatrix, objectRotation);
+
+        mat4.multiply(this.cameraMatrix, finT, finR);
+    }
+
+    getViewMatrix() {
+        this.transform();
+        this.viewMatrixUniform =  mat4.identity(mat4.create());
+        mat4.invert(this.viewMatrixUniform, this.cameraMatrix);
+        return this.viewMatrixUniform;
     }
 }
