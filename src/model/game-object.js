@@ -54,19 +54,8 @@ export class MovingObject extends GameObject{
     }
 
     _rotate() {
-        this.rotationMatrix = mat4.identity(mat4.create());
-        let quaternion = this.body.quaternion;
-        let vecX = new CANNON.Vec3(1, 0, 0);
-        let vecY = new CANNON.Vec3(0, 1, 0);
-        let vecZ = new CANNON.Vec3(0, 0, 1);
-
-        let rx = quaternion.toAxisAngle(vecX);
-        let ry = quaternion.toAxisAngle(vecY);
-        let rz = quaternion.toAxisAngle(vecZ);
-
-        mat4.rotate(this.rotationMatrix, this.rotationMatrix, rx[1], [1, 0, 0]);
-        mat4.rotate(this.rotationMatrix, this.rotationMatrix, ry[1], [0, 1, 0]);
-        mat4.rotate(this.rotationMatrix, this.rotationMatrix, rz[1], [0, 0, 1]);
+        let q = this.body.quaternion;
+        mat4.fromQuat(this.rotationMatrix, [q.x, q.y, q.z, q.w]);
     }
 
     _scale() {
