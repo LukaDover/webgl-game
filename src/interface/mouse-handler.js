@@ -1,9 +1,9 @@
-import {degToRad} from "../common/common";
+import {degToRad, glContext} from "../common/common";
 
 export class MouseHandler {
     constructor(camera) {
-        this.lastX = 0;
-        this.lastY = 0;
+        this.lastX = glContext.viewportWidth / 2;
+        this.lastY = glContext.viewportHeight / 2;
         this.camera = camera;
     }
 
