@@ -1,6 +1,5 @@
 // Main loop of the game
 import {glContext, initGL, initShaderProgram, pMatrix} from "./common/common";
-import * as keyboard from './keyboard/keyboard-handler';
 import {MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
 import {Renderer} from "./render/renderer";
@@ -8,7 +7,7 @@ import {Vehicle} from "./model/vehicle/vehicle";
 import {Handler} from "./keyboard/keyboard-handler";
 import {initKeyboard} from "./keyboard/keyboard-handler";
 import {Camera} from "./model/camera/camera";
-import {MouseHandler} from "./keyboard/keyboard-handler";
+import {MouseHandler} from "./keyboard/mouse-handler";
 var CANNON = require('cannon');
 
 
