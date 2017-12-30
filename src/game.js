@@ -62,7 +62,9 @@ function simulation() {
 
     let mouseHandler = new MouseHandler(camera);
     let handleEvent = mouseHandler.handleEvent.bind(mouseHandler);
+    let handleScroll = mouseHandler.handleScroll.bind(mouseHandler);
     document.onmousemove = handleEvent;
+    document.onwheel = handleScroll;
 
     let fixedTimeStep = 1.0 / 60.0; // seconds
     let maxSubSteps = 3;

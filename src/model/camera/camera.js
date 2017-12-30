@@ -31,3 +31,11 @@ export class Camera {
         ShaderLoader.setViewMatrixUniform(viewMatrix);
     }
 }
+
+
+export class MovingCamera extends Camera {
+    constructor(movingObject) {
+        super();
+        this.movingObject = movingObject;
+    }
+}
