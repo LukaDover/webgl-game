@@ -6,7 +6,7 @@ let CANNON = require('cannon');
 export class Vehicle extends MovingObject {
     constructor(dataPath) {
         super(dataPath);
-        this.mass = 100;
+        this.mass = 500;
         this.wheelMaterial =  new CANNON.Material("wheelMaterial");
     }
 
