@@ -19,7 +19,7 @@ function simulation() {
     world.defaultContactMaterial.friction = 0;
 
 
-    let vehicle = new Vehicle('./blender/cube.obj');
+    let vehicle = new Vehicle('./blender/vehicle.obj');
     vehicle.initializeBuffers();
     vehicle.initializeVehicle();
 
