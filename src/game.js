@@ -4,10 +4,10 @@ import {MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
 import {Renderer} from "./render/renderer";
 import {Vehicle} from "./model/vehicle/vehicle";
-import {Handler} from "./keyboard/keyboard-handler";
-import {initKeyboard} from "./keyboard/keyboard-handler";
+import {Handler} from "./interface/keyboard-handler";
+import {initKeyboard} from "./interface/keyboard-handler";
 import {Camera} from "./model/camera/camera";
-import {MouseHandler} from "./keyboard/mouse-handler";
+import {MouseHandler} from "./interface/mouse-handler";
 var CANNON = require('cannon');
 
 
