@@ -6,7 +6,7 @@ import {Renderer} from "./render/renderer";
 import {Vehicle} from "./model/vehicle/vehicle";
 import {Handler} from "./interface/keyboard-handler";
 import {initKeyboard} from "./interface/keyboard-handler";
-import {Camera} from "./model/camera/camera";
+import {Camera, MovingCamera} from "./model/camera/camera";
 import {MouseHandler} from "./interface/mouse-handler";
 var CANNON = require('cannon');
 
@@ -58,7 +58,7 @@ function simulation() {
     initKeyboard(keyboardHandler);
 
     // Create a camera
-    let camera = new Camera();
+    let camera = new MovingCamera(vehicle);
 
     let mouseHandler = new MouseHandler(camera);
     let handleEvent = mouseHandler.handleEvent.bind(mouseHandler);
