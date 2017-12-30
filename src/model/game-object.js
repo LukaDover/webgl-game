@@ -44,13 +44,17 @@ export class MovingObject extends GameObject{
     constructor(dataPath) {
         super(dataPath);
         this.body = Collider.getMovingBodyFromMesh(this.mesh);  // CANNON.Body
+        this.translationMatrix = mat4.identity(mat4.create());
+        this.rotationMatrix = mat4.identity(mat4.create());
     }
 
     _translate() {
-        mat4.translate(this.mvMatrix, this.mvMatrix, [this.body.position.x, this.body.position.y, this.body.position.z]);
+        //mat4.translate(this.mvMatrix, this.mvMatrix, [this.body.position.x, this.body.position.y, this.body.position.z]);
+        mat4.fromTranslation(this.translationMatrix, [this.body.position.x, this.body.position.y, this.body.position.z])
     }
 
     _rotate() {
+        this.rotationMatrix = mat4.identity(mat4.create());
         let quaternion = this.body.quaternion;
         let vecX = new CANNON.Vec3(1, 0, 0);
         let vecY = new CANNON.Vec3(0, 1, 0);
@@ -60,9 +64,9 @@ export class MovingObject extends GameObject{
         let ry = quaternion.toAxisAngle(vecY);
         let rz = quaternion.toAxisAngle(vecZ);
 
-        mat4.rotate(this.mvMatrix, this.mvMatrix, rx[1], [1, 0, 0]);
-        mat4.rotate(this.mvMatrix, this.mvMatrix, ry[1], [0, 1, 0]);
-        mat4.rotate(this.mvMatrix, this.mvMatrix, rz[1], [0, 0, 1]);
+        mat4.rotate(this.rotationMatrix, this.rotationMatrix, rx[1], [1, 0, 0]);
+        mat4.rotate(this.rotationMatrix, this.rotationMatrix, ry[1], [0, 1, 0]);
+        mat4.rotate(this.rotationMatrix, this.rotationMatrix, rz[1], [0, 0, 1]);
     }
 
     _scale() {
@@ -71,10 +75,11 @@ export class MovingObject extends GameObject{
 
     transform() {
         this.mvMatrix = this._getIdentityMatrix();
-
         this._translate();
         this._rotate();
         this._scale();
+
+        mat4.multiply(this.mvMatrix, this.translationMatrix, this.rotationMatrix);
 
     }
 
