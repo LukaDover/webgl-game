@@ -1,4 +1,5 @@
 import {DUMMYDATA, DUMMYMESH, DUMMYPATH} from "../common/path";
+import {downloadModels} from "webgl-obj-loader";
 
 let OBJ = require('webgl-obj-loader');
 
