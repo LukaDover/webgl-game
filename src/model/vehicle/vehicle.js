@@ -1,4 +1,4 @@
-import {MovingObject} from "../game-object";
+import {ChildObject, MovingObject} from "../game-object";
 import {DUMMYPATH} from "../../common/path";
 
 let CANNON = require('cannon');
@@ -60,7 +60,7 @@ export class Vehicle extends MovingObject {
     }
 }
 
-export class Wheel extends MovingObject {
+export class Wheel extends ChildObject {
     constructor(dataPath, chassisConnectionPointsLocal) {
         super(dataPath);
         this.body = new CANNON.Body({ mass: 1 });

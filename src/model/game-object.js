@@ -92,6 +92,8 @@ export class MovingObject extends GameObject{
         this.body = Collider.getMovingBodyFromMesh(this.mesh);  // CANNON.Body
         this.translationMatrix = mat4.identity(mat4.create());
         this.rotationMatrix = mat4.identity(mat4.create());
+        this.mvMatrix = mat4.identity(mat4.create());
+        this.children = [];
     }
 
     _translate() {
@@ -116,6 +118,11 @@ export class MovingObject extends GameObject{
 
         mat4.multiply(this.mvMatrix, this.translationMatrix, this.rotationMatrix);
 
+        if (this.hasChildren()) {
+            this.children.forEach(function(child) {
+                child.transform();
+            })
+        }
     }
 
     _getIdentityMatrix() {
@@ -123,6 +130,15 @@ export class MovingObject extends GameObject{
     }
 
 
+    hasChildren() {
+        return this.children.length > 0;
+    }
+}
+
+export class ChildObject extends MovingObject {
+    constructor(dataPath) {
+        super(dataPath);
+    }
 }
 
 export class StationaryObject extends GameObject {

@@ -47,16 +47,11 @@ export class MovingCamera extends Camera {
 
     transform() {
         // zoom perseveres, rotation perseveres, object translation + rotation changes
-        let objectTranslation = this.movingObject.translationMatrix;
-        let objectRotation = this.movingObject.rotationMatrix;
 
-        let finT = mat4.identity(mat4.create());
-        mat4.multiply(finT, this.zoomMatrix, objectTranslation);
+        let cmm = mat4.create();
+        mat4.multiply(cmm, this.zoomMatrix, this.rotationMatrix);
 
-        let finR = mat4.identity(mat4.create());
-        mat4.multiply(finR, this.rotationMatrix, objectRotation);
-
-        mat4.multiply(this.cameraMatrix, finT, finR);
+        mat4.multiply(this.cameraMatrix, this.movingObject.mvMatrix, cmm);
     }
 
     getViewMatrix() {
