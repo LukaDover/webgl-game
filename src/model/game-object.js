@@ -17,11 +17,21 @@ export class GameObject {
         this.mvMatrix = mat4.identity(mat4.create());
         this.texture = null;
         this.textureIsLoaded = false;
+        this.children = [];
     }
 
     render() {
         this.setMatrixUniforms();
         Renderer.drawObject(this);
+
+        this.children.forEach(function (child) {
+            child.render();
+        })
+    }
+
+    addChild(gameObject) {
+        this.children.push(gameObject);
+        gameObject.parent = this
     }
 
     setMatrixUniforms() {
@@ -97,8 +107,6 @@ export class MovingObject extends GameObject{
         this.body = Collider.getMovingBodyFromMesh(this.mesh);  // CANNON.Body
         this.translationMatrix = mat4.identity(mat4.create());
         this.rotationMatrix = mat4.identity(mat4.create());
-        this.mvMatrix = mat4.identity(mat4.create());
-        this.children = [];
     }
 
     _translate() {
@@ -143,7 +151,28 @@ export class MovingObject extends GameObject{
 export class ChildObject extends MovingObject {
     constructor(dataPath) {
         super(dataPath);
+        this.parent = null;
+        mat4.fromTranslation(this.translationMatrix, [3, 0, 0])
     }
+
+    transform() {
+
+        this.mvMatrix = this._getIdentityMatrix();
+        // this._translate();
+        // this._rotate();
+        // this._scale();
+
+        let thismm = mat4.create();
+        mat4.multiply(thismm, this.translationMatrix, this.rotationMatrix);
+
+        mat4.multiply(this.mvMatrix, this.parent.mvMatrix, thismm);
+
+        this.children.forEach(function(child) {
+            child.transform();
+        })
+    }
+
+
 }
 
 export class StationaryObject extends GameObject {

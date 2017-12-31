@@ -1,6 +1,6 @@
 // Main loop of the game
 import {glContext, initGL, initShaderProgram, pMatrix} from "./common/common";
-import {MovingObject, StationaryObject} from "./model/game-object";
+import {ChildObject, MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
 import {Renderer} from "./render/renderer";
 import {Vehicle} from "./model/vehicle/vehicle";
@@ -23,6 +23,15 @@ function simulation() {
     vehicle.initializeBuffers();
     vehicle.initializeVehicle();
     //vehicle.getTexture('./blender/textures/wood.jpg');
+
+    let cube = new ChildObject('./blender/textured-cube.obj');
+    cube.initializeBuffers();
+    cube.getTexture('./blender/textures/wood.jpg');
+    vehicle.addChild(cube);
+    // let cubeBody = new Cannon.Body({
+    //     mass: 1,
+    //     position:
+    // })
 
 // Create a plane
     let ground = new StationaryObject('./blender/scene/ground.obj');
