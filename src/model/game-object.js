@@ -55,15 +55,7 @@ export class GameObject {
         throw Error('Not Implemented');
     }
 
-     getTexture() {
-        let args = {
-            obj: './blender/textures/wood.jpg',
-            mtl: true,
-            downloadMtlTextures: true,
-            name: 'woodencube'
-        };
-
-        // this.models = downloadModels([args]);
+     getTexture(path) {
         let thisObject = this;
         thisObject.texture = glContext.createTexture();
         thisObject.texture.image = new Image();
@@ -71,7 +63,7 @@ export class GameObject {
         thisObject.texture.image.onload = function() {
             thisObject.handleLoadedTexture();
         };
-        thisObject.texture.image.src = args.obj;
+        thisObject.texture.image.src = path;
     }
 
     handleLoadedTexture() {

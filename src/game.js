@@ -22,7 +22,7 @@ function simulation() {
     let vehicle = new Vehicle('./blender/textured-cube.obj');
     vehicle.initializeBuffers();
     vehicle.initializeVehicle();
-    vehicle.getTexture();
+    vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
     let ground = new StationaryObject('./blender/ground.obj');
