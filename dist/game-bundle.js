@@ -16816,11 +16816,25 @@ function simulation() {
         mass: 0,
         position: new CANNON.Vec3(0, 10, -20)
     })
-    let treeShape = new CANNON.Box(new CANNON.Vec3(1,1,1));
+    let treeShape = new CANNON.Box(new CANNON.Vec3(1,1,5));
     treeBody.addShape(treeShape);
     tree.body = treeBody;
     tree.setPosition();
     world.add(treeBody);
+
+    //house
+    let house = new __WEBPACK_IMPORTED_MODULE_1__model_game_object__["c" /* StationaryObject */]('./blender/house2.obj');
+    house.getTexture('./blender/textures/wood.jpg');
+    house.initializeBuffers();
+    let houseBody = new CANNON.Body({
+        mass: 0,
+        position: new CANNON.Vec3(10, 10, -20)
+    })
+    let houseShape = new CANNON.Box(new CANNON.Vec3(3,3,5));
+    houseBody.addShape(houseShape);
+    house.body = houseBody;
+    house.setPosition();
+    world.add(houseBody);
 
 
     // Create a camera
@@ -16851,6 +16865,7 @@ function simulation() {
         ground.render();
         vehicle.render();
         tree.render();
+        house.render();
     })();
 }
 
