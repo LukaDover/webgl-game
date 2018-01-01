@@ -19,12 +19,14 @@ function simulation() {
     world.defaultContactMaterial.friction = 0;
 
 
-    let vehicle = new Vehicle('./blender/vehicle.obj');
+    let vehicle = new Vehicle('./blender/textured-cube.obj');
     vehicle.initializeBuffers();
     vehicle.initializeVehicle();
+    vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
-    let ground = new StationaryObject('./blender/ground.obj');
+    let ground = new StationaryObject('./blender/textured-ground.obj');
+    ground.getTexture('./blender/textures/tiles.jpg');
     ground.initializeBuffers();
     let groundBody = new CANNON.Body({
         mass: 0, // mass == 0 makes the body static

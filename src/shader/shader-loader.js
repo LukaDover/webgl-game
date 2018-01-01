@@ -25,10 +25,12 @@ export class ShaderLoader {
         // store location of aVertexPosition variable defined in shader
         shaderProgram.vertexPositionAttribute = glContext.getAttribLocation(shaderProgram, "aVertexPosition");
         shaderProgram.vertexNormalAttribute = glContext.getAttribLocation(shaderProgram, "aVertexNormal");
+        shaderProgram.vertexTextureAttribute = glContext.getAttribLocation(shaderProgram, "aTextureCoordinate");
 
         // turn on vertex position attribute at specified position
         glContext.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
         glContext.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+        glContext.enableVertexAttribArray(shaderProgram.vertexTextureAttribute);
 
         // store location of uPMatrix variable defined in shader - projection matrix
         shaderProgram.projectionMatrixUniform = glContext.getUniformLocation(shaderProgram, "uProjectionMatrix");
@@ -48,6 +50,11 @@ export class ShaderLoader {
 
         // store location of uDirectionalColor variable defined in shader
         shaderProgram.directionalColorUniform = glContext.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+        shaderProgram.useTextureUniform = glContext.getUniformLocation(shaderProgram, "uUseTexture");
+
+        // store location of uSampler variable defined in shader
+        shaderProgram.samplerUniform = glContext.getUniformLocation(shaderProgram, "uSampler");
 
         this.shaders.push(vertexShader);
         this.shaders.push(fragmentShader);

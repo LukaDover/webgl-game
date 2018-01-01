@@ -18,31 +18,31 @@ export class Renderer {
         lighting.setLighting();
     }
 
-    static drawObject(mesh) {
+    static drawObject(object) {
 
 
         setPerspective(45, 0.1, 100);
 
-        // // Set the drawing position to the "identity" point, which is
-        // // the center of the scene.
-        //mat4.identity(mvMatrix);
-        //
-        // mat4.translate(mvMatrix, [-1.5, 0.0, -15.0]);
-        //
-        // mat4.translate(mvMatrix, [meshes.cube.cubeBody.position.x, meshes.cube.cubeBody.position.y, meshes.cube.cubeBody.position.z]);
-
-
-        // IMPORTED MESH
-        glContext.bindBuffer(glContext.ARRAY_BUFFER, mesh.vertexBuffer);
-        glContext.vertexAttribPointer(shaderProgram.vertexPositionAttribute, mesh.vertexBuffer.itemSize, glContext.FLOAT, false, 0, 0);
+        // bind vertex buffer
+        glContext.bindBuffer(glContext.ARRAY_BUFFER, object.mesh.vertexBuffer);
+        glContext.vertexAttribPointer(shaderProgram.vertexPositionAttribute, object.mesh.vertexBuffer.itemSize, glContext.FLOAT, false, 0, 0);
 
         // bind normal buffer
-        glContext.bindBuffer(glContext.ARRAY_BUFFER, mesh.normalBuffer);
-        glContext.vertexAttribPointer(shaderProgram.vertexNormalAttribute, mesh.normalBuffer.itemSize, glContext.FLOAT, false, 0, 0);
+        glContext.bindBuffer(glContext.ARRAY_BUFFER, object.mesh.normalBuffer);
+        glContext.vertexAttribPointer(shaderProgram.vertexNormalAttribute, object.mesh.normalBuffer.itemSize, glContext.FLOAT, false, 0, 0);
+
+        // bind texture buffer
+        if (object.usesTexture()) {
+            glContext.enableVertexAttribArray(shaderProgram.vertexTextureAttribute);
+            glContext.bindBuffer(glContext.ARRAY_BUFFER, object.mesh.textureBuffer);
+            glContext.vertexAttribPointer(shaderProgram.vertexTextureAttribute, object.mesh.textureBuffer.itemSize, glContext.FLOAT, false, 0, 0);
+        } else {
+            glContext.disableVertexAttribArray(shaderProgram.vertexTextureAttribute);
+        }
 
         // bind index buffer
-        glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+        glContext.bindBuffer(glContext.ELEMENT_ARRAY_BUFFER, object.mesh.indexBuffer);
 
-        glContext.drawElements(glContext.TRIANGLES, mesh.indexBuffer.numItems, glContext.UNSIGNED_SHORT, 0);
+        glContext.drawElements(glContext.TRIANGLES, object.mesh.indexBuffer.numItems, glContext.UNSIGNED_SHORT, 0);
     }
 }

@@ -10,17 +10,28 @@
         precision mediump float;
 
         varying vec3 vLightWeighting;
+        varying vec2 vTextureCoordinate;
+
+        uniform bool uUseTexture;
+
+        uniform sampler2D uSampler;
 
          void main(void) {
-            vec3 color = vec3(0.5, 0.5, 1);
-            gl_FragColor = vec4(color.rgb * vLightWeighting, 1.0);
+            vec4 color;
+            if (uUseTexture) {
+                color = texture2D(uSampler, vec2(vTextureCoordinate.s, vTextureCoordinate.t));
+            } else {
+		        color = vec4(1.0, 0.3, 0.5, 1.0);
+		    }
 
+            gl_FragColor = vec4(color.rgb * vLightWeighting, 1.0);
          }
     </script>
 
     <script id="shader-vs" type="x-shader/x-vertex">
         attribute vec3 aVertexPosition;
         attribute vec3 aVertexNormal;
+        attribute vec2 aTextureCoordinate;
 
         uniform mat4 uModelMatrix;
         uniform mat4 uProjectionMatrix;
@@ -31,10 +42,17 @@
         uniform vec3 uDirectionalColor;		// light color
         uniform vec3 uLightingDirection;	// light direction uniform
 
+        uniform bool uUseTexture;
+
         varying vec3 vLightWeighting;
+        varying vec2 vTextureCoordinate;
+
 
         void main(void) {
             gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+            if (uUseTexture) {
+                vTextureCoordinate = aTextureCoordinate;
+            }
 
             vec3 transformedNormal = uNormalMatrix * aVertexNormal;
 
@@ -42,8 +60,6 @@
 		    float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
 
             // calculate lighting
-
-
             vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
         }
 
