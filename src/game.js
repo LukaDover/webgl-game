@@ -59,6 +59,21 @@ function simulation() {
     let keyboardHandler = new Handler(vehicle.vehicle);
     initKeyboard(keyboardHandler);
 
+    //tree
+    let tree = new StationaryObject('./blender/textured-roundTree.obj');
+    tree.getTexture('./blender/textures/wood.jpg');
+    tree.initializeBuffers();
+    let treeBody = new CANNON.Body({
+        mass: 0,
+        position: new CANNON.Vec3(0, 10, -20)
+    })
+    let treeShape = new CANNON.Box(new CANNON.Vec3(1,1,1));
+    treeBody.addShape(treeShape);
+    tree.body = treeBody;
+    tree.setPosition();
+    world.add(treeBody);
+
+
     // Create a camera
     let camera = new MovingCamera(vehicle);
 
@@ -86,6 +101,7 @@ function simulation() {
         camera.setUniforms();
         ground.render();
         vehicle.render();
+        tree.render();
     })();
 }
 
