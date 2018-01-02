@@ -1,4 +1,5 @@
 import {glContext, shaderProgram, pMatrix} from '../common/common';
+import {FragmentShader, VertexShader} from "./shader";
 let mat3 = require('gl-matrix').mat3;
 
 export class ShaderLoader {
@@ -7,11 +8,11 @@ export class ShaderLoader {
     }
 
     initShaders() {
-        let fragmentShader = this.getShader(glContext, "shader-fs");
-        let vertexShader = this.getShader(glContext, "shader-vs");
+        let fragmentShader = new FragmentShader(ShaderLoader.getShaderSource('./shader/fragment-shader.glsl'));
+        let vertexShader = new VertexShader(ShaderLoader.getShaderSource('./shader/vertex-shader.glsl'));
         
-        glContext.attachShader(shaderProgram, vertexShader);
-        glContext.attachShader(shaderProgram, fragmentShader);
+        glContext.attachShader(shaderProgram, vertexShader.shader);
+        glContext.attachShader(shaderProgram, fragmentShader.shader);
         glContext.linkProgram(shaderProgram);  // links  webgl context to the shaderProgram
 
         // If creating the shader program failed, alert
@@ -60,50 +61,16 @@ export class ShaderLoader {
         this.shaders.push(fragmentShader);
     }
 
-    getShader(gl, id) {
+    static getShaderSource(path) {
+        let request = new XMLHttpRequest();
+        request.open("GET", path, false);
+        request.send(null);
 
-        let shaderScript = document.getElementById(id);
-
-        // Didn't find an element with the specified ID; abort.
-        if (!shaderScript) {
-            return null;
-        }
-
-        // Walk through the source element's children, building the
-        // shader source string.
-        let shaderSource = "";
-        let currentChild = shaderScript.firstChild;
-        while (currentChild) {
-            if (currentChild.nodeType === 3) {
-                shaderSource += currentChild.textContent;
-            }
-            currentChild = currentChild.nextSibling;
-        }
-
-        // Now figure out what type of shader script we have,
-        // based on its MIME type.
-        let shader;
-        if (shaderScript.type === "x-shader/x-fragment") {
-            shader = gl.createShader(gl.FRAGMENT_SHADER);
-        } else if (shaderScript.type === "x-shader/x-vertex") {
-            shader = gl.createShader(gl.VERTEX_SHADER);
+        if (request.status === 200) {
+            return request.responseText;
         } else {
-            return null;  // Unknown shader type
+            throw new Error('Shader Script failed to load');
         }
-
-        // Send the source to the shader object
-        gl.shaderSource(shader, shaderSource);
-
-        // Compile the shader program
-        gl.compileShader(shader);
-
-        // See if it compiled successfully
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert(gl.getShaderInfoLog(shader));
-            return null;
-        }
-
-        return shader;
     }
 
     static setMatrixUniforms(mvMatrix) {
