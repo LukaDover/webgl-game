@@ -8,6 +8,7 @@ import {Handler} from "./interface/keyboard-handler";
 import {initKeyboard} from "./interface/keyboard-handler";
 import {Camera, MovingCamera} from "./model/camera/camera";
 import {MouseHandler} from "./interface/mouse-handler";
+import {Scene} from "./scene/scene";
 var CANNON = require('cannon');
 
 
