@@ -1,5 +1,5 @@
 // Main loop of the game
-import {glContext, initGL, initShaderProgram, pMatrix} from "./common/common";
+import {glContext, initGL, initShaderProgram, pMatrix, degToRad} from "./common/common";
 import {MovingObject, StationaryObject} from "./model/game-object";
 import {ShaderLoader} from "./shader/shader-loader";
 import {Renderer} from "./render/renderer";

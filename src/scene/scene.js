@@ -14,4 +14,8 @@ export class Scene {
         }
     }
 
+    initScene(){
+        //not yet implemented
+    }
+
 }
