@@ -1,5 +1,8 @@
 import {ChildObject, MovingObject} from "../game-object";
 import {DUMMYPATH} from "../../common/path";
+import {degToRad} from "../../common/common";
+
+let mat4 = require('gl-matrix').mat4;
 
 let CANNON = require('cannon');
 
@@ -34,11 +37,13 @@ export class Vehicle extends MovingObject {
             wheelBody.addShape(cylinderShape, new CANNON.Vec3(), q);
             this.wheelBodies.push(wheelBody);
         }
+        this.frontRightWheel.body = this.wheelBodies[0];
     }
 
     // Order in which the wheels are added matters
     addWheels() {
-        this.frontRightWheel = new FrontRightWheel(DUMMYPATH);
+        this.frontRightWheel = new FrontRightWheel('./blender/vehicle/right-tire.obj');
+        this.frontRightWheel.initializeBuffers();
         this.backRightWheel = new BackRightWheel(DUMMYPATH);
         this.frontLeftWheel = new FrontLeftWheel(DUMMYPATH);
         this.backLeftWheel = new BackLeftWheel(DUMMYPATH);
@@ -58,9 +63,19 @@ export class Vehicle extends MovingObject {
             this.wheelBodies[i].quaternion.copy(t.quaternion);
         }
     }
+
+    render() {
+        super.render();
+        this.frontRightWheel.render();
+    }
+
+    transform() {
+        super.transform();
+        this.frontRightWheel.transform();
+    }
 }
 
-export class Wheel extends ChildObject {
+export class Wheel extends MovingObject {
     constructor(dataPath, chassisConnectionPointsLocal) {
         super(dataPath);
         this.body = new CANNON.Body({ mass: 1 });
@@ -86,15 +101,25 @@ export class Wheel extends ChildObject {
 class FrontLeftWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(1, 1, 0));
-
     }
 }
 
 class FrontRightWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(1, -1, 0));
-
     }
+
+    _rotate() {
+        super._rotate();
+        mat4.rotate(this.rotationMatrix, this.rotationMatrix, degToRad(90), [0, 0, 1]);
+    }
+
+    _translate() {
+        super._translate();
+        mat4.translate(this.translationMatrix, this.translationMatrix,)
+    }
+
+
 }
 
 class BackLeftWheel extends Wheel {
