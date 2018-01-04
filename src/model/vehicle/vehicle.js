@@ -38,6 +38,7 @@ export class Vehicle extends MovingObject {
             this.wheelBodies.push(wheelBody);
         }
         this.frontRightWheel.body = this.wheelBodies[0];
+        this.frontLeftWheel.body = this.wheelBodies[1];
     }
 
     // Order in which the wheels are added matters
@@ -45,7 +46,8 @@ export class Vehicle extends MovingObject {
         this.frontRightWheel = new FrontRightWheel('./blender/vehicle/right-tire.obj');
         this.frontRightWheel.initializeBuffers();
         this.backRightWheel = new BackRightWheel(DUMMYPATH);
-        this.frontLeftWheel = new FrontLeftWheel(DUMMYPATH);
+        this.frontLeftWheel = new FrontLeftWheel('./blender/vehicle/right-tire.obj');
+        this.frontLeftWheel.initializeBuffers();
         this.backLeftWheel = new BackLeftWheel(DUMMYPATH);
 
         this.vehicle.addWheel(this.frontRightWheel.attributes);
@@ -67,11 +69,13 @@ export class Vehicle extends MovingObject {
     render() {
         super.render();
         this.frontRightWheel.render();
-    }
+        this.frontLeftWheel.render();
+        }
 
     transform() {
         super.transform();
         this.frontRightWheel.transform();
+        this.frontLeftWheel.transform();
     }
 }
 
@@ -108,18 +112,6 @@ class FrontRightWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(1, -1, 0));
     }
-
-    _rotate() {
-        super._rotate();
-        mat4.rotate(this.rotationMatrix, this.rotationMatrix, degToRad(90), [0, 0, 1]);
-    }
-
-    _translate() {
-        super._translate();
-        mat4.translate(this.translationMatrix, this.translationMatrix,)
-    }
-
-
 }
 
 class BackLeftWheel extends Wheel {
