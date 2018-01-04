@@ -19,7 +19,7 @@ function simulation() {
     world.defaultContactMaterial.friction = 0;
 
 
-    let vehicle = new Vehicle('./blender/vehicle/chassis.obj');
+    let vehicle = new Vehicle('./blender/vehicle/vehicle.obj');
     vehicle.initializeBuffers();
     vehicle.initializeVehicle();
     //vehicle.getTexture('./blender/textures/wood.jpg');

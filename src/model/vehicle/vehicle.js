@@ -14,7 +14,7 @@ export class Vehicle extends MovingObject {
     }
 
     initializeVehicle() {
-        this.chassisShape = new CANNON.Box(new CANNON.Vec3(2, 1,0.5));
+        this.chassisShape = new CANNON.Box(new CANNON.Vec3(6, 3, 0.5));
         this.chassisBody = new CANNON.Body({ mass: this.mass });
         this.body = this.chassisBody;  // for rendering
         this.chassisBody.addShape(this.chassisShape);
@@ -112,26 +112,26 @@ export class Wheel extends MovingObject {
 
 class FrontLeftWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(1, 1, 0));
+        super(dataPath, new CANNON.Vec3(2, 2, 0));
     }
 }
 
 class FrontRightWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(1, -1, 0));
+        super(dataPath, new CANNON.Vec3(2, -2, 0));
     }
 }
 
 class BackLeftWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(-1, 1, 0));
+        super(dataPath, new CANNON.Vec3(-2, 2, 0));
 
     }
 }
 
 class BackRightWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(-1, -1, 0));
+        super(dataPath, new CANNON.Vec3(-2, -2, 0));
 
     }
 }
