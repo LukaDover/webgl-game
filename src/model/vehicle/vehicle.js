@@ -39,16 +39,20 @@ export class Vehicle extends MovingObject {
         }
         this.frontRightWheel.body = this.wheelBodies[0];
         this.frontLeftWheel.body = this.wheelBodies[1];
+        this.backRightWheel.body = this.wheelBodies[2];
+        this.backLeftWheel.body = this.wheelBodies[3];
     }
 
     // Order in which the wheels are added matters
     addWheels() {
         this.frontRightWheel = new FrontRightWheel('./blender/vehicle/right-tire.obj');
         this.frontRightWheel.initializeBuffers();
-        this.backRightWheel = new BackRightWheel(DUMMYPATH);
+        this.backRightWheel = new BackRightWheel('./blender/vehicle/right-tire.obj');
+        this.backRightWheel.initializeBuffers();
         this.frontLeftWheel = new FrontLeftWheel('./blender/vehicle/right-tire.obj');
         this.frontLeftWheel.initializeBuffers();
-        this.backLeftWheel = new BackLeftWheel(DUMMYPATH);
+        this.backLeftWheel = new BackLeftWheel('./blender/vehicle/right-tire.obj');
+        this.backLeftWheel.initializeBuffers();
 
         this.vehicle.addWheel(this.frontRightWheel.attributes);
         this.vehicle.addWheel(this.frontLeftWheel.attributes);
@@ -70,12 +74,16 @@ export class Vehicle extends MovingObject {
         super.render();
         this.frontRightWheel.render();
         this.frontLeftWheel.render();
+        this.backRightWheel.render();
+        this.backLeftWheel.render();
         }
 
     transform() {
         super.transform();
         this.frontRightWheel.transform();
         this.frontLeftWheel.transform();
+        this.backRightWheel.transform();
+        this.backLeftWheel.transform();
     }
 }
 
