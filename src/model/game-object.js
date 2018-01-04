@@ -3,6 +3,8 @@ import {Collider} from "../collider/collider";
 import {BufferManager} from "../shader/buffer-manager";
 import {Renderer} from "../render/renderer";
 import {ShaderLoader} from "../shader/shader-loader";
+import {downloadModels, MaterialLibrary} from "webgl-obj-loader";
+import {glContext, shaderProgram} from "../common/common";
 import {downloadModels} from "webgl-obj-loader";
 import {glContext, isPowerOf2, shaderProgram} from "../common/common";
 
@@ -18,6 +20,8 @@ export class GameObject {
         this.texture = null;
         this.textureIsLoaded = false;
         this.children = [];
+        this.material = null;
+        this.materialLoaded = false;
     }
 
     render() {
@@ -46,6 +50,26 @@ export class GameObject {
             glContext.bindTexture(glContext.TEXTURE_2D, this.texture);
             glContext.uniform1i(shaderProgram.samplerUniform, 0);
         }
+    }
+
+    setMaterial(dataPath) {
+
+    }
+
+    getMaterial(dataPath) {
+        let request = new XMLHttpRequest();
+        request.open("GET", dataPath, false);
+        request.send(null);
+
+        if (request.status === 200) {
+            let data = request.responseText;
+            return new MaterialLibrary(data).materials;
+        } else {
+            throw new Error('Material file failed to load');
+        }
+
+
+
     }
 
     initializeBuffers() {
@@ -107,6 +131,8 @@ export class MovingObject extends GameObject{
         this.body = Collider.getMovingBodyFromMesh(this.mesh);  // CANNON.Body
         this.translationMatrix = mat4.identity(mat4.create());
         this.rotationMatrix = mat4.identity(mat4.create());
+        this.mvMatrix = mat4.identity(mat4.create());
+        this.children = [];
     }
 
     _translate() {
