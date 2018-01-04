@@ -35,8 +35,6 @@ export class GameObject {
             glContext.activeTexture(glContext.TEXTURE0);
             glContext.bindTexture(glContext.TEXTURE_2D, this.texture);
             glContext.uniform1i(shaderProgram.samplerUniform, 0);
-        } else {
-            glContext.bindTexture(glContext.TEXTURE_2D, null);
         }
     }
 

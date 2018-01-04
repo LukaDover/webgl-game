@@ -1,5 +1,8 @@
 import {ChildObject, MovingObject} from "../game-object";
 import {DUMMYPATH} from "../../common/path";
+import {degToRad} from "../../common/common";
+
+let mat4 = require('gl-matrix').mat4;
 
 let CANNON = require('cannon');
 
@@ -11,7 +14,7 @@ export class Vehicle extends MovingObject {
     }
 
     initializeVehicle() {
-        this.chassisShape = new CANNON.Box(new CANNON.Vec3(2, 1,0.5));
+        this.chassisShape = new CANNON.Box(new CANNON.Vec3(6, 3, 0.5));
         this.chassisBody = new CANNON.Body({ mass: this.mass });
         this.body = this.chassisBody;  // for rendering
         this.chassisBody.addShape(this.chassisShape);
@@ -34,14 +37,22 @@ export class Vehicle extends MovingObject {
             wheelBody.addShape(cylinderShape, new CANNON.Vec3(), q);
             this.wheelBodies.push(wheelBody);
         }
+        this.frontRightWheel.body = this.wheelBodies[0];
+        this.frontLeftWheel.body = this.wheelBodies[1];
+        this.backRightWheel.body = this.wheelBodies[2];
+        this.backLeftWheel.body = this.wheelBodies[3];
     }
 
     // Order in which the wheels are added matters
     addWheels() {
-        this.frontRightWheel = new FrontRightWheel(DUMMYPATH);
-        this.backRightWheel = new BackRightWheel(DUMMYPATH);
-        this.frontLeftWheel = new FrontLeftWheel(DUMMYPATH);
-        this.backLeftWheel = new BackLeftWheel(DUMMYPATH);
+        this.frontRightWheel = new FrontRightWheel('./blender/vehicle/right-tire.obj');
+        this.frontRightWheel.initializeBuffers();
+        this.backRightWheel = new BackRightWheel('./blender/vehicle/right-tire.obj');
+        this.backRightWheel.initializeBuffers();
+        this.frontLeftWheel = new FrontLeftWheel('./blender/vehicle/right-tire.obj');
+        this.frontLeftWheel.initializeBuffers();
+        this.backLeftWheel = new BackLeftWheel('./blender/vehicle/right-tire.obj');
+        this.backLeftWheel.initializeBuffers();
 
         this.vehicle.addWheel(this.frontRightWheel.attributes);
         this.vehicle.addWheel(this.frontLeftWheel.attributes);
@@ -58,9 +69,25 @@ export class Vehicle extends MovingObject {
             this.wheelBodies[i].quaternion.copy(t.quaternion);
         }
     }
+
+    render() {
+        super.render();
+        this.frontRightWheel.render();
+        this.frontLeftWheel.render();
+        this.backRightWheel.render();
+        this.backLeftWheel.render();
+        }
+
+    transform() {
+        super.transform();
+        this.frontRightWheel.transform();
+        this.frontLeftWheel.transform();
+        this.backRightWheel.transform();
+        this.backLeftWheel.transform();
+    }
 }
 
-export class Wheel extends ChildObject {
+export class Wheel extends MovingObject {
     constructor(dataPath, chassisConnectionPointsLocal) {
         super(dataPath);
         this.body = new CANNON.Body({ mass: 1 });
@@ -85,28 +112,26 @@ export class Wheel extends ChildObject {
 
 class FrontLeftWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(1, 1, 0));
-
+        super(dataPath, new CANNON.Vec3(2, 2, 0));
     }
 }
 
 class FrontRightWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(1, -1, 0));
-
+        super(dataPath, new CANNON.Vec3(2, -2, 0));
     }
 }
 
 class BackLeftWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(-1, 1, 0));
+        super(dataPath, new CANNON.Vec3(-2, 2, 0));
 
     }
 }
 
 class BackRightWheel extends Wheel {
     constructor(dataPath) {
-        super(dataPath, new CANNON.Vec3(-1, -1, 0));
+        super(dataPath, new CANNON.Vec3(-2, -2, 0));
 
     }
 }

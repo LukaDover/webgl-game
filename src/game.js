@@ -19,10 +19,10 @@ function simulation() {
     world.defaultContactMaterial.friction = 0;
 
 
-    let vehicle = new Vehicle('./blender/textured-cube.obj');
+    let vehicle = new Vehicle('./blender/vehicle/vehicle.obj');
     vehicle.initializeBuffers();
     vehicle.initializeVehicle();
-    vehicle.getTexture('./blender/textures/wood.jpg');
+    //vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
     let ground = new StationaryObject('./blender/textured-ground.obj');
