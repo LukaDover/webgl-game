@@ -11,6 +11,8 @@ export class Vehicle extends MovingObject {
         super(dataPath);
         this.mass = 500;
         this.wheelMaterial =  new CANNON.Material("wheelMaterial");
+        this.material = {}
+        this.material.diffuse = [75 / 255, 83/255, 32/255, 1.0];
     }
 
     initializeVehicle() {
