@@ -13,6 +13,7 @@ export class Renderer {
 
         // Clear the canvas before we start drawing on it.
         glContext.clear(glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT);
+        glContext.clearColor(119/255, 136/255, 153/255, 1.0);
 
         let lighting = LightingManager.instance;
         lighting.setLighting();
