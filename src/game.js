@@ -39,6 +39,12 @@ function simulation() {
     ground.setPosition();
     world.add(groundBody);
 
+    // create left building
+    let leftBuilding = new StationaryObject('./blender/scene/left-building.obj');
+    leftBuilding.initializeBuffers();
+    leftBuilding.setInitialPosition([0, 0, -20], null, null);
+    leftBuilding.getTexture('./blender/textures/facade-apartment.jpg');
+
     // Contact material
     let wheelGroundContactMaterial = new CANNON.ContactMaterial(
         vehicle.wheelMaterial,
@@ -85,6 +91,7 @@ function simulation() {
         Renderer.drawScene();
         camera.setUniforms();
         ground.render();
+        leftBuilding.render();
         vehicle.render();
     })();
 }
