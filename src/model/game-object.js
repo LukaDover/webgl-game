@@ -3,6 +3,8 @@ import {Collider} from "../collider/collider";
 import {BufferManager} from "../shader/buffer-manager";
 import {Renderer} from "../render/renderer";
 import {ShaderLoader} from "../shader/shader-loader";
+import {downloadModels, MaterialLibrary} from "webgl-obj-loader";
+import {glContext, shaderProgram} from "../common/common";
 import {downloadModels} from "webgl-obj-loader";
 import {glContext, isPowerOf2, shaderProgram} from "../common/common";
 
@@ -18,6 +20,8 @@ export class GameObject {
         this.texture = null;
         this.textureIsLoaded = false;
         this.children = [];
+        this.material = null;
+        this.materialLoaded = false;
     }
 
     render() {
@@ -36,6 +40,7 @@ export class GameObject {
 
     setMatrixUniforms() {
         this.setTexture();
+        this.setColorDiffuse();
         glContext.uniform1i(shaderProgram.useTextureUniform, this.usesTexture());  // Affects the flow in shader programs
         ShaderLoader.setMatrixUniforms(this.mvMatrix);
     }
@@ -46,6 +51,34 @@ export class GameObject {
             glContext.bindTexture(glContext.TEXTURE_2D, this.texture);
             glContext.uniform1i(shaderProgram.samplerUniform, 0);
         }
+    }
+
+    setColorDiffuse() {
+        if (this.material !== null && this.material.diffuse !== null) {
+            glContext.uniform4fv(shaderProgram.colorDifuseUniform, this.material.diffuse);
+        } else {
+            glContext.uniform4fv(shaderProgram.colorDifuseUniform, [0.9, 0.5, 0.1, 1.0]);
+        }
+    }
+
+    setMaterial(dataPath) {
+
+    }
+
+    getMaterial(dataPath) {
+        let request = new XMLHttpRequest();
+        request.open("GET", dataPath, false);
+        request.send(null);
+
+        if (request.status === 200) {
+            let data = request.responseText;
+            return new MaterialLibrary(data).materials;
+        } else {
+            throw new Error('Material file failed to load');
+        }
+
+
+
     }
 
     initializeBuffers() {
@@ -107,6 +140,8 @@ export class MovingObject extends GameObject{
         this.body = Collider.getMovingBodyFromMesh(this.mesh);  // CANNON.Body
         this.translationMatrix = mat4.identity(mat4.create());
         this.rotationMatrix = mat4.identity(mat4.create());
+        this.mvMatrix = mat4.identity(mat4.create());
+        this.children = [];
     }
 
     _translate() {

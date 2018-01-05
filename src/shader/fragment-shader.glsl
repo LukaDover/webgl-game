@@ -6,6 +6,7 @@ varying vec3 vLightWeighting;
 varying vec2 vTextureCoordinate;
 
 uniform bool uUseTexture;
+uniform vec4 uColorDiffuse;
 
 uniform sampler2D uSampler;
 
@@ -14,7 +15,7 @@ void main(void) {
     if (uUseTexture) {
         color = texture2D(uSampler, vec2(vTextureCoordinate.s, vTextureCoordinate.t));
     } else {
-        color = vec4(1.0, 0.3, 0.5, 1.0);
+        color = uColorDiffuse;
     }
 
     gl_FragColor = vec4(color.rgb * vLightWeighting, 1.0);

@@ -106,7 +106,10 @@ export class Wheel extends MovingObject {
             maxSuspensionTravel: 0.3,
             customSlidingRotationalSpeed: -30,
             useCustomSlidingRotationalSpeed: true
-        }
+        };
+
+        this.material = {};
+        this.material.diffuse = [0.014673, 0.014673, 0.014673, 1.0]
     }
 
 

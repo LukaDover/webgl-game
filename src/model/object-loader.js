@@ -28,4 +28,12 @@ export class ObjectLoader {
         }
        return new OBJ.Mesh(objectData);
     }
+
+    static getMaterial(dataPath) {
+        // if (dataPath obj replace mtl does not exits console warn) {
+        //     warn and return
+        // }
+        //
+        // read diffuse and specular components in this file and make a material
+    }
 }
