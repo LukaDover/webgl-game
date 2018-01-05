@@ -11,7 +11,7 @@ export class Vehicle extends MovingObject {
         super(dataPath);
         this.mass = 500;
         this.wheelMaterial =  new CANNON.Material("wheelMaterial");
-        this.material = {}
+        this.material = {};
         this.material.diffuse = [75 / 255, 83/255, 32/255, 1.0];
     }
 
@@ -20,7 +20,7 @@ export class Vehicle extends MovingObject {
         this.chassisBody = new CANNON.Body({ mass: this.mass });
         this.body = this.chassisBody;  // for rendering
         this.chassisBody.addShape(this.chassisShape);
-        this.chassisBody.position.set(0, 0, 4);
+        this.chassisBody.position.set(0, 0, -10);
         this.chassisBody.angularVelocity.set(0, 0, 0.5);
 
         this.vehicle = new CANNON.RaycastVehicle({

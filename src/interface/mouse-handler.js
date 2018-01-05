@@ -19,12 +19,12 @@ export class MouseHandler {
         this.lastY = y;
 
         this.camera.rotate(degToRad(deltaX / 10), [0, 1, 0]);
-        this.camera.rotate(degToRad(deltaY / 10), [1, 0, 0]);
+        //this.camera.rotate(degToRad(deltaY / 10), [1, 0, 0]);
     }
 
     handleScroll(event) {
         // Zoom in and out
         let deltaY = event.deltaY / 100.0;
-        this.camera.translate([0, 0, deltaY])
+        this.camera.translate([-deltaY/2, 0, deltaY])
     }
 }
