@@ -21,12 +21,12 @@ export class Handler {
 
         switch(event.keyCode){
 
-            case 38: // forward
+            case 38: case 87: // forward
                 this.vehicle.applyEngineForce(up ? 0 : -maxForce, 2);
                 this.vehicle.applyEngineForce(up ? 0 : -maxForce, 3);
                 break;
 
-            case 40: // backward
+            case 40: case 83: // backward
                 this.vehicle.applyEngineForce(up ? 0 : maxForce, 2);
                 this.vehicle.applyEngineForce(up ? 0 : maxForce, 3);
                 break;
@@ -38,12 +38,12 @@ export class Handler {
                 this.vehicle.setBrake(brakeForce, 3);
                 break;
 
-            case 39: // right
+            case 39: case 68: // right
                 this.vehicle.setSteeringValue(up ? 0 : -maxSteerVal, 0);
                 this.vehicle.setSteeringValue(up ? 0 : -maxSteerVal, 1);
                 break;
 
-            case 37: // left
+            case 37: case 65: // left
                 this.vehicle.setSteeringValue(up ? 0 : maxSteerVal, 0);
                 this.vehicle.setSteeringValue(up ? 0 : maxSteerVal, 1);
                 break;

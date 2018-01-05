@@ -43,7 +43,6 @@ export class MovingCamera extends Camera {
     }
 
     translate(vector3) {
-        console.log(this.zoomMatrix);
         if (!(this.zoomMatrix[14] > 12 && vector3[2] > 0) && !(this.zoomMatrix[14] < 3 && vector3[2] < 0)) {
             mat4.translate(this.zoomMatrix, this.zoomMatrix, vector3);
         }
