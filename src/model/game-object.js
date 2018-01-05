@@ -4,7 +4,7 @@ import {BufferManager} from "../shader/buffer-manager";
 import {Renderer} from "../render/renderer";
 import {ShaderLoader} from "../shader/shader-loader";
 import {downloadModels} from "webgl-obj-loader";
-import {glContext, shaderProgram} from "../common/common";
+import {glContext, isPowerOf2, shaderProgram} from "../common/common";
 
 let CANNON = require('cannon');
 let mat4 = require('gl-matrix').mat4;
@@ -50,7 +50,7 @@ export class GameObject {
      * @param s - scaling matrix
      */
     setInitialPosition(t, r, s) {
-        throw Error('Not Implemented');
+        mat4.translate(this.mvMatrix, this.mvMatrix, t);
     }
 
      getTexture(path) {
@@ -70,9 +70,16 @@ export class GameObject {
         // Third texture usus Linear interpolation approximation with nearest Mipmap selection
         glContext.bindTexture(glContext.TEXTURE_2D, this.texture);
         glContext.texImage2D(glContext.TEXTURE_2D, 0, glContext.RGBA, glContext.RGBA, glContext.UNSIGNED_BYTE, this.texture.image);
-        glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MAG_FILTER, glContext.LINEAR);
-        glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MIN_FILTER, glContext.LINEAR_MIPMAP_NEAREST);
-        glContext.generateMipmap(glContext.TEXTURE_2D);
+
+        if (isPowerOf2(this.texture.image.height) && isPowerOf2(this.texture.image.width)) {
+            glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MAG_FILTER, glContext.LINEAR);
+            glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MIN_FILTER, glContext.LINEAR_MIPMAP_NEAREST);
+            glContext.generateMipmap(glContext.TEXTURE_2D);
+        } else {
+            glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_WRAP_S, glContext.CLAMP_TO_EDGE);
+            glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_WRAP_T, glContext.CLAMP_TO_EDGE);
+            glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MIN_FILTER, glContext.LINEAR);
+        }
 
         glContext.bindTexture(glContext.TEXTURE_2D, null);
 

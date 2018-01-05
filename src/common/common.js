@@ -11,6 +11,10 @@ export function setPerspective(angle, near, far) {
     mat4.perspective(pMatrix, degToRad(angle), glContext.viewportWidth / glContext.viewportHeight, near, far);
 }
 
+export function isPowerOf2(value) {
+    return (value & (value - 1)) === 0;
+}
+
 export function degToRad(degrees) {
     return degrees * Math.PI / 180;
 }

@@ -25,8 +25,8 @@ function simulation() {
     //vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
-    let ground = new StationaryObject('./blender/textured-ground.obj');
-    ground.getTexture('./blender/textures/tiles.jpg');
+    let ground = new StationaryObject('./blender/scene/ground.obj');
+    ground.getTexture('./blender/textures/asphalt.jpg');
     ground.initializeBuffers();
     let groundBody = new CANNON.Body({
         mass: 0, // mass == 0 makes the body static
@@ -38,6 +38,19 @@ function simulation() {
     ground.body = groundBody;
     ground.setPosition();
     world.add(groundBody);
+
+    // create left building
+    let leftBuilding = new StationaryObject('./blender/scene/left-building.obj');
+    leftBuilding.initializeBuffers();
+    leftBuilding.setInitialPosition([0, 0, -20], null, null);
+    leftBuilding.getTexture('./blender/textures/facade.jpg');
+
+    // create right building
+    let rightBuilding = new StationaryObject('./blender/scene/right-building.obj');
+    rightBuilding.initializeBuffers();
+    rightBuilding.setInitialPosition([0, 0, -20], null, null);
+    rightBuilding.getTexture('./blender/textures/facade.jpg');
+
 
     // Contact material
     let wheelGroundContactMaterial = new CANNON.ContactMaterial(
@@ -85,6 +98,8 @@ function simulation() {
         Renderer.drawScene();
         camera.setUniforms();
         ground.render();
+        leftBuilding.render();
+        rightBuilding.render();
         vehicle.render();
     })();
 }

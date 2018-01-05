@@ -21,7 +21,7 @@ export class Renderer {
     static drawObject(object) {
 
 
-        setPerspective(45, 0.1, 100);
+        setPerspective(45, 0.1, 500);
 
         // bind vertex buffer
         glContext.bindBuffer(glContext.ARRAY_BUFFER, object.mesh.vertexBuffer);
