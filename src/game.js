@@ -8,6 +8,7 @@ import {Handler} from "./interface/keyboard-handler";
 import {initKeyboard} from "./interface/keyboard-handler";
 import {Camera, MovingCamera} from "./model/camera/camera";
 import {MouseHandler} from "./interface/mouse-handler";
+import {Scene} from "./scene/scene";
 var CANNON = require('cannon');
 
 
@@ -25,7 +26,7 @@ function simulation() {
     //vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
-    let ground = new StationaryObject('./blender/scene/ground.obj');
+    let ground = new StationaryObject('./blender/scene/textured-streetGround.obj');
     ground.getTexture('./blender/textures/asphalt.jpg');
     ground.initializeBuffers();
     let groundBody = new CANNON.Body({
@@ -39,18 +40,8 @@ function simulation() {
     ground.setPosition();
     world.add(groundBody);
 
-    // create left building
-    let leftBuilding = new StationaryObject('./blender/scene/left-building.obj');
-    leftBuilding.initializeBuffers();
-    leftBuilding.setInitialPosition([0, 0, -20], null, null);
-    leftBuilding.getTexture('./blender/textures/facade.jpg');
-
-    // create right building
-    let rightBuilding = new StationaryObject('./blender/scene/right-building.obj');
-    rightBuilding.initializeBuffers();
-    rightBuilding.setInitialPosition([0, 0, -20], null, null);
-    rightBuilding.getTexture('./blender/textures/facade.jpg');
-
+    let scene = new Scene();
+    scene.initScene(world);
 
     // Contact material
     let wheelGroundContactMaterial = new CANNON.ContactMaterial(
@@ -98,8 +89,7 @@ function simulation() {
         Renderer.drawScene();
         camera.setUniforms();
         ground.render();
-        leftBuilding.render();
-        rightBuilding.render();
+        scene.render();
         vehicle.render();
     })();
 }
