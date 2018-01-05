@@ -37,7 +37,7 @@ export class MovingCamera extends Camera {
             this.zoomMatrix = mat4.identity(mat4.create()); // translational matrix
             this.rotationMatrix = mat4.identity(mat4.create());
             this.rotate(degToRad(-90), [0,0,1]);
-            this.translate([-10,0,0]);
+            this.translate([-15,0,0]);
             this.rotate(degToRad(45), [1,0,0]);
     }
 

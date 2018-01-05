@@ -26,7 +26,7 @@ function simulation() {
     vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
-    let ground = new StationaryObject('./blender/textured-ground.obj');
+    let ground = new StationaryObject('./blender/textured-streetGround.obj');
     ground.getTexture('./blender/textures/tiles.jpg');
     ground.initializeBuffers();
     let groundBody = new CANNON.Body({
@@ -72,6 +72,10 @@ function simulation() {
     let fixedTimeStep = 1.0 / 60.0; // seconds
     let maxSubSteps = 3;
 
+    //scene
+    let scene = new Scene();
+    scene.initScene(world);
+
 // Start the simulation loop
     let lastTime;
     (function simloop(time){
@@ -86,6 +90,7 @@ function simulation() {
         Renderer.drawScene();
         camera.setUniforms();
         ground.render();
+        scene.render();
         vehicle.render();
     })();
 }
