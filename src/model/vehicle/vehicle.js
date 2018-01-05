@@ -108,30 +108,66 @@ export class Wheel extends MovingObject {
             useCustomSlidingRotationalSpeed: true
         }
     }
+
+
+    render() {
+        super.render();
+        if (this.rim !== undefined) {
+            this.rim.render();
+        }
+    }
+
+    transform() {
+        super.transform();
+        if (this.rim !== undefined) {
+            this.rim.transform();
+        }
+
+    }
 }
 
 class FrontLeftWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(2, 2, 0));
+        this.rim = new ChildObject('./blender/vehicle/tire-rim-blades-nongons.obj');
+        this.rim.parent = this;
+        this.rim.initializeBuffers();
+        this.rim.getTexture('./blender/textures/aluminum.jpg');
+        mat4.fromTranslation(this.rim.translationMatrix, [0, 0.20, 0]);
     }
 }
 
 class FrontRightWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(2, -2, 0));
+        this.rim = new ChildObject('./blender/vehicle/tire-rim-blades-nongons.obj');
+        this.rim.parent = this;
+        this.rim.initializeBuffers();
+        this.rim.getTexture('./blender/textures/aluminum.jpg');
+        mat4.fromTranslation(this.rim.translationMatrix, [0, -0.20, 0]);
+        mat4.rotate(this.rim.rotationMatrix, this.rim.rotationMatrix, degToRad(180), [0, 0, 1]);
     }
 }
 
 class BackLeftWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(-2, 2, 0));
-
+        this.rim = new ChildObject('./blender/vehicle/tire-rim-blades-nongons.obj');
+        this.rim.parent = this;
+        this.rim.initializeBuffers();
+        this.rim.getTexture('./blender/textures/aluminum.jpg');
+        mat4.fromTranslation(this.rim.translationMatrix, [0, 0.20, 0]);
     }
 }
 
 class BackRightWheel extends Wheel {
     constructor(dataPath) {
         super(dataPath, new CANNON.Vec3(-2, -2, 0));
-
+        this.rim = new ChildObject('./blender/vehicle/tire-rim-blades-nongons.obj');
+        this.rim.parent = this;
+        this.rim.initializeBuffers();
+        this.rim.getTexture('./blender/textures/aluminum.jpg');
+        mat4.fromTranslation(this.rim.translationMatrix, [0, -0.20, 0]);
+        mat4.rotate(this.rim.rotationMatrix, this.rim.rotationMatrix, degToRad(180), [0, 0, 1]);
     }
 }

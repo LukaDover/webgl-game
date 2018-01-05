@@ -152,7 +152,6 @@ export class ChildObject extends MovingObject {
     constructor(dataPath) {
         super(dataPath);
         this.parent = null;
-        mat4.fromTranslation(this.translationMatrix, [3, 0, 0])
     }
 
     transform() {
