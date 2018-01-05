@@ -40,6 +40,7 @@ export class GameObject {
 
     setMatrixUniforms() {
         this.setTexture();
+        this.setColorDiffuse();
         glContext.uniform1i(shaderProgram.useTextureUniform, this.usesTexture());  // Affects the flow in shader programs
         ShaderLoader.setMatrixUniforms(this.mvMatrix);
     }
@@ -49,6 +50,14 @@ export class GameObject {
             glContext.activeTexture(glContext.TEXTURE0);
             glContext.bindTexture(glContext.TEXTURE_2D, this.texture);
             glContext.uniform1i(shaderProgram.samplerUniform, 0);
+        }
+    }
+
+    setColorDiffuse() {
+        if (this.material !== null && this.material.diffuse !== null) {
+            glContext.uniform4fv(shaderProgram.colorDifuseUniform, this.material.diffuse);
+        } else {
+            glContext.uniform4fv(shaderProgram.colorDifuseUniform, [0.9, 0.5, 0.1, 1.0]);
         }
     }
 

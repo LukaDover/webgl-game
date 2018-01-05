@@ -57,6 +57,8 @@ export class ShaderLoader {
         // store location of uSampler variable defined in shader
         shaderProgram.samplerUniform = glContext.getUniformLocation(shaderProgram, "uSampler");
 
+        shaderProgram.colorDifuseUniform = glContext.getUniformLocation(shaderProgram, "uColorDiffuse");
+
         this.shaders.push(vertexShader);
         this.shaders.push(fragmentShader);
     }
