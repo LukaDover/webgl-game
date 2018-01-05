@@ -25,8 +25,8 @@ function simulation() {
     //vehicle.getTexture('./blender/textures/wood.jpg');
 
 // Create a plane
-    let ground = new StationaryObject('./blender/textured-ground.obj');
-    ground.getTexture('./blender/textures/tiles.jpg');
+    let ground = new StationaryObject('./blender/scene/ground.obj');
+    ground.getTexture('./blender/textures/asphalt.jpg');
     ground.initializeBuffers();
     let groundBody = new CANNON.Body({
         mass: 0, // mass == 0 makes the body static
