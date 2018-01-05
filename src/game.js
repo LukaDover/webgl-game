@@ -43,7 +43,7 @@ function simulation() {
     let leftBuilding = new StationaryObject('./blender/scene/left-building.obj');
     leftBuilding.initializeBuffers();
     leftBuilding.setInitialPosition([0, 0, -20], null, null);
-    leftBuilding.getTexture('./blender/textures/facade-apartment.jpg');
+    leftBuilding.getTexture('./blender/textures/facade.jpg');
 
     // Contact material
     let wheelGroundContactMaterial = new CANNON.ContactMaterial(
