@@ -1,4 +1,6 @@
 import {ShaderLoader} from "../../shader/shader-loader";
+import {degToRad} from "../../common/common";
+
 
 let mat4 = require('gl-matrix').mat4;
 
@@ -35,6 +37,9 @@ export class MovingCamera extends Camera {
             this.movingObject = movingObject;
             this.zoomMatrix = mat4.identity(mat4.create()); // translational matrix
             this.rotationMatrix = mat4.identity(mat4.create());
+            this.rotate(degToRad(-90), [0,0,1]);
+            this.translate([-20,0,0]);
+            this.rotate(degToRad(45), [1,0,0]);
     }
 
     translate(vector3) {
