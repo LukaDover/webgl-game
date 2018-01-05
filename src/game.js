@@ -24,15 +24,6 @@ function simulation() {
     vehicle.initializeVehicle();
     //vehicle.getTexture('./blender/textures/wood.jpg');
 
-    let cube = new ChildObject('./blender/textured-cube.obj');
-    cube.initializeBuffers();
-    cube.getTexture('./blender/textures/wood.jpg');
-    vehicle.addChild(cube);
-    // let cubeBody = new Cannon.Body({
-    //     mass: 1,
-    //     position:
-    // })
-
 // Create a plane
     let ground = new StationaryObject('./blender/scene/ground.obj');
     ground.getTexture('./blender/textures/asphalt.jpg');
