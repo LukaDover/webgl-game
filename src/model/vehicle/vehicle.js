@@ -16,7 +16,7 @@ export class Vehicle extends MovingObject {
     }
 
     initializeVehicle() {
-        this.chassisShape = new CANNON.Box(new CANNON.Vec3(6, 3, 0.5));
+        this.chassisShape = new CANNON.Box(new CANNON.Vec3(4.7, 3.3, 0.5));
         this.chassisBody = new CANNON.Body({ mass: this.mass });
         this.body = this.chassisBody;  // for rendering
         this.chassisBody.addShape(this.chassisShape);
