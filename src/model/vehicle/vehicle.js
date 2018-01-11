@@ -9,7 +9,7 @@ let CANNON = require('cannon');
 export class Vehicle extends MovingObject {
     constructor(dataPath) {
         super(dataPath);
-        this.mass = 500;
+        this.mass = 250;
         this.wheelMaterial =  new CANNON.Material("wheelMaterial");
         this.material = {};
         this.material.diffuse = [75 / 255, 83/255, 32/255, 1.0];

@@ -88,6 +88,11 @@ function simulation() {
 
         lastTime = time;
         vehicle.transform();
+        if(vehicle.chassisBody.position.x > 290 && vehicle.chassisBody.position.x > -300){
+            alert("Bravo, konec igre!");
+        }else if(vehicle.chassisBody.position.x < -300){
+            alert("Napačna smer!")
+        }
         Renderer.drawScene();
         camera.setUniforms();
         ground.render();
